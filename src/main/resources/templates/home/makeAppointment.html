@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <div th:replace="fragments/fragment :: bootstrap"></div>
+    <title>Main page</title>
+    <div th:replace="fragments/fragment :: cssDash"></div>
+    <style>
+        #mainDiv {
+            align-content: center;
+        }
+    </style>
+</head>
+
+
+<body>
+
+<div class="card">
+    <div class="card-body">
+        <h1 style="text-align: center"> Make an appointment </h1>
+        <table>
+            <h3 style="color: blue" th:text="'You are currently Logged in ' + ${TestCenterName}" />
+
+            <form method="get" action="/takeDate">
+                <div class="form-group">
+                    <label>Pick the date</label>
+                    <input type="date" id="mydate" name="mydate" placeholder="choose date" required>
+                </div>
+
+
+                <div class="form-group">
+                    <label>Choose time: </label>
+                    <select select id="time" name="time" required>
+                        <option th:each="p : ${timeSlots}" th:value="${p.time}" th:text="${p.time}"/>
+                    </select>
+                </div>
+                <hr>
+                <button style="float: left" type="submit" class="btn btn-primary" value="CreateList">Submit</button>
+                <br>
+
+            </form>
+            <hr>
+            <a th:href="@{/}">
+                <button>Log Out</button>
+            </a>
+            <hr>
+
+        </table>
+
+
+                        <hr>
+                        <table border="1" cellpadding="10">
+                            <h1 style="color: blue" th:text="${cprError}"></h1>
+                            <h6 th:text="${bookedAppointment}"></h6>
+
+                            <hr>
+                            <h6 th:text="${timeMatch}"></h6>
+                            <br>
+                            <hr>
+                        </table>
+
+
+                        <a th:href="@{/makeAppointment}">
+                            <button>try again</button>
+                        </a>
+                        <a th:href="@{/makeAppointment}">
+                            <button>see the booked time and date</button>
+                        </a>
+                        <hr>
+                        <table border="1" cellpadding="10">
+                            <tr>
+                                <th>Test center id</th>
+                                <th>Test center name</th>
+                            </tr>
+                            <tr>
+                                <td> 1</td>
+                                <td> CPH-Center</td>
+                            </tr>
+                            <tr>
+                                <td> 2</td>
+                                <td> CPH-North</td>
+                            </tr>
+                            <tr>
+                                <td> 3</td>
+                                <td> CPH-South</td>
+                            </tr>
+                            <tr>
+                                <td> 4</td>
+                                <td> CPH-East</td>
+                            </tr>
+                            <tr>
+                                <td> 5</td>
+                                <td> CPH-West</td>
+                            </tr>
+                        </table>
+<hr>
+                        <table border="1" cellpadding="10">
+                            <br/><br/>
+                            <h6>These time slots are already taken please take different time slot than below</h6>
+
+                            <tr>
+                                <th>Year</th>
+                                <th>Month</th>
+                                <th>Day</th>
+                                <th>Hour</th>
+                                <th>Minute</th>
+                                <th>Test Center Id</th>
+
+
+                            </tr>
+                            <tr th:each="t2 : ${appList}">
+                                <td th:text="${t2.getYear()}"></td>
+                                <td th:text="${t2.getMonth()}"></td>
+                                <td th:text="${t2.getDay()}"></td>
+                                <td th:text="${t2.getHour()}"></td>
+                                <td th:text="${t2.getMinute()}"></td>
+                                <td th:text="${t2.getTcID()}"></td>
+
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<hr>
+
+
+<br>
+
+
+<!---source of inspiration https://stackoverflow.com/questions/23671407/restrict-future-dates-in-html5-date-input -->
+<script>
+    $(function () {
+        var dtToday = new Date();
+        var month = dtToday.getMonth() + 1;
+        var day = dtToday.getDate() + 2;
+        var day1 = dtToday.getDate() + 1;
+        var year = dtToday.getFullYear();
+        if (month < 10)
+            month = '0' + month.toString();
+        if (day < 10)
+            day = '0' + day.toString();
+        var maxDate = year + '-' + month + '-' + day;
+        var minDate = year + '-' + month + '-' + day1;
+        $('#mydate').attr('max', maxDate);
+        $('#mydate').attr('min', minDate);
+
+
+    });
+
+
+</script>
+
+</body>
+</html>

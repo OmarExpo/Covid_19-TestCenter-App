@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <div th:replace="fragments/fragment :: bootstrap"></div>
+    <title>Add to Waiting list</title>
+    <style>
+        .main {
+            height:50%;
+            width: 50%;
+            display: table;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            border: 3px solid green;
+            background-color: #dddddd;
+            border-collapse: collapse;
+            box-shadow: purple;
+
+
+        }
+        label{
+            align-content: center;
+            font-size:large;
+            font-weight: bold;
+            color: darkblue;
+            margin-left: 10px;
+
+        }
+        button{
+            margin-left:10px;
+            align-self: center;
+        }
+        body{
+            background-color: rgb(108,108,108);
+        }
+    </style>
+</head>
+<body>
+<div class="main">
+    <h1 style="text-align: center"> Register </h1>
+    <table>
+        <form method="post" action="/createList" th:object="${User}">
+            <div class="form-group">
+                <label > Your name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter first name" required>
+            </div>
+            <div class="form-group">
+                <label > User name</label>
+                <input type="text" class="form-control" id="userName" name="userName" placeholder="Enter your username" required>
+            </div>
+
+            <div class="form-group">
+                <label > Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+            </div>
+            <div class="form-group">
+                <label >Cpr</label>
+                <input type="number" class="form-control" id="cpr" name="cpr" placeholder="Enter cpr" required>
+            </div>
+            <div class="form-group">
+                <label >contact number</label>
+                <input type="number" class="form-control" id="phone" name="phone" placeholder="contact number" required>
+            </div>
+            <br>
+            <button style="float: left" type="submit" class="btn btn-primary"value="CreateList">Submit</button>
+
+        </form>
+        <br>
+        <a th:href="@{/login}" ><button class="btn btn-primary" style="float: right; margin-right: 5px" >Login</button></a>
+        <br>
+        <div>
+
+
+            <hr>
+            <h6 style="color: red" th:text="${error}"></h6>
+            <hr></div>
+
+    </table>
+
+
+</div>
+</body>
+</html>

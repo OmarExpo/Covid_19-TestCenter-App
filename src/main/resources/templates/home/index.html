@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://thymeleaf.org"><head>
+    <meta charset="UTF-8">
+    <title>Home page</title>
+    <div th:replace="fragments/fragment :: bootstrap"></div>
+</head>
+<body>
+
+<div th:replace="fragments/fragment :: navbar"></div>
+<hr>
+<h6 style="color:#FF00FF" th:text="'User name:- ' + ${UserName} + '  Your selected location is:-  ' + ${vennueName}"></h6>
+<hr>
+
+<hr>
+<h6 th:text="'You have appointment On' + ${currentAppointment}"></h6>
+<hr>
+<a th:href="@{/}"><button>Logout</button></a>
+
+
+
+
+</body>
+</html>
