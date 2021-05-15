@@ -6,7 +6,7 @@
     <title>Add to Waiting list</title>
     <style>
         .main {
-            height:50%;
+            height: 50%;
             width: 50%;
             display: table;
             position: absolute;
@@ -21,20 +21,23 @@
 
 
         }
-        label{
+
+        label {
             align-content: center;
-            font-size:large;
+            font-size: large;
             font-weight: bold;
             color: darkblue;
             margin-left: 10px;
 
         }
-        button{
-            margin-left:10px;
+
+        button {
+            margin-left: 10px;
             align-self: center;
         }
-        body{
-            background-color: rgb(108,108,108);
+
+        body {
+            background-color: rgb(108, 108, 108);
         }
     </style>
 </head>
@@ -44,39 +47,62 @@
     <table>
         <form method="post" action="/createList" th:object="${User}">
             <div class="form-group">
-                <label > Your name</label>
+                <label> Your name</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter first name" required>
             </div>
             <div class="form-group">
-                <label > User name</label>
-                <input type="text" class="form-control" id="userName" name="userName" placeholder="Enter your username" required>
+                <label> User name</label>
+                <input type="text" class="form-control" id="userName" name="userName" placeholder="Enter your username"
+                       required>
             </div>
 
             <div class="form-group">
-                <label > Password</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+                <label> Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter password"
+                       required>
             </div>
             <div class="form-group">
-                <label >Cpr</label>
+                <label>Cpr</label>
                 <input type="number" class="form-control" id="cpr" name="cpr" placeholder="Enter cpr" required>
             </div>
             <div class="form-group">
-                <label >contact number</label>
+                <label>contact number</label>
                 <input type="number" class="form-control" id="phone" name="phone" placeholder="contact number" required>
             </div>
+            <div class="form-group">
+                <input type="number" class="form-control" id="tcID" name="tcID" value="0" hidden>
+            </div>
+            <div class="form-group">
+                <input type="number" class="form-control" id="vcID" name="vcID" value="0" hidden>
+            </div>
+
+            <div class="form-group">
+                <input type="number" class="form-control" id="tsID" name="tsID" value="0" hidden>
+            </div>
+            <div class="form-group">
+                <input type="number" class="form-control" id="vsID" name="vsID" value="0" hidden>
+            </div>
+            <div class="form-group">
+                <input type="number" class="form-control" id="vacNameID" name="vacNameID" value="0" hidden>
+            </div>
+
+
             <br>
-            <button style="float: left" type="submit" class="btn btn-primary"value="CreateList">Submit</button>
+            <button style="float: left" type="submit" class="btn btn-primary" value="CreateList">Submit</button>
 
         </form>
         <br>
-        <a th:href="@{/login}" ><button class="btn btn-primary" style="float: right; margin-right: 5px" >Login</button></a>
+        <a th:href="@{/login}">
+            <button class="btn btn-primary" style="float: right; margin-right: 5px">Login</button>
+        </a>
         <br>
         <div>
 
 
             <hr>
             <h6 style="color: red" th:text="${error}"></h6>
-            <hr></div>
+            <hr>
+        </div>
 
     </table>
 

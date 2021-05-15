@@ -26,8 +26,8 @@ public class RepoImple implements RepoInterface {
 
     public User addUser(User user) {
 
-        String sql = "Insert into User(name,userName,password,cpr,phone ) values(?,?,?,?,?)";
-        jdbcTemplate.update(sql, user.getName(), user.getUserName(), user.getPassword(), user.getCpr(), user.getPhone());
+        String sql = "Insert into User(name,userName,password,cpr,phone,tcID,vcID,tsID,vsID,vacNameID ) values(?,?,?,?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql, user.getName(), user.getUserName(), user.getPassword(), user.getCpr(), user.getPhone(),user.getTcID(),user.getVcID(),user.getTsID(),user.getVsID(),user.getVacNameID());
         return null;
     }
 

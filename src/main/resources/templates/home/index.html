@@ -3,18 +3,36 @@
     <meta charset="UTF-8">
     <title>Home page</title>
     <div th:replace="fragments/fragment :: bootstrap"></div>
+    <style>
+        #div1{
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            border: 1px solid black;
+        }
+    </style>
+
 </head>
-<body>
+<body style="background-color: rgb(109,109,109)">
 
-<div th:replace="fragments/fragment :: navbar"></div>
-<hr>
-<h6 style="color:#FF00FF" th:text="'User name:- ' + ${UserName} + '  Your selected location is:-  ' + ${vennueName}"></h6>
+<div th:replace="fragments/fragment :: mynavbar"></div>
 <hr>
 
-<hr>
-<h6 th:text="'You have appointment On' + ${currentAppointment}"></h6>
-<hr>
-<a th:href="@{/}"><button>Logout</button></a>
+<div  id="div1">
+    <div class="row">
+        <div class="col-m-12">
+            <div class="card">
+                <div class="card-body">
+                    <hr>
+                    <h6 style="color:#FF00FF" th:text="'User name:- ' + ${UserName} + '  Your selected location is:-  ' + ${vennueName}"></h6>
+                    <hr>
+                    <h6 th:text="'You have appointment On' + ${currentAppointment}"></h6>
+                    <hr>
+                </div>
+            </div>
+        </div>
 
 
 

@@ -8,36 +8,29 @@ public class User {
     private String password;
     private String cpr;
     private String phone;
-    private String testStatus;
+    private int tcID;
+    private int vcID;
+    private int tsID;
+    private int vsID;
+    private int vacNameID;
 
-    public String getTestStatus() {
-        return testStatus;
-    }
 
-    public void setTestStatus(String testStatus) {
-        this.testStatus = testStatus;
-    }
 
     public User() {
     }
 
-    public User(int userID, String name,String userName, String password, String cpr, String phone,String testStatus) {
+    public User(int userID, String name, String userName, String password, String cpr, String phone, int tcID, int vcID, int tsID, int vsID,int vacNameID) {
         this.userID = userID;
         this.name = name;
         this.userName = userName;
         this.password = password;
         this.cpr = cpr;
         this.phone = phone;
-        this.testStatus = testStatus;
-    }
-
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        this.tcID = tcID;
+        this.vcID = vcID;
+        this.tsID = tsID;
+        this.vsID = vsID;
+        this.vacNameID=vacNameID;
     }
 
     public int getUserID() {
@@ -46,6 +39,14 @@ public class User {
 
     public void setUserID(int userID) {
         this.userID = userID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getUserName() {
@@ -78,5 +79,44 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public int getTcID() {
+        return tcID;
+    }
+
+    public void setTcID(int tcID) {
+        this.tcID = tcID;
+    }
+
+    public int getVcID() {
+        return vcID;
+    }
+
+    public void setVcID(int vcID) {
+        this.vcID = vcID;
+    }
+
+    public int getTsID() {
+        return tsID;
+    }
+
+    public void setTsID(int tsID) {
+        this.tsID = tsID;
+    }
+
+    public int getVsID() {
+        return vsID;
+    }
+
+    public void setVsID(int vsID) {
+        this.vsID = vsID;
+    }
+    public int getVacNameID() {
+        return vacNameID;
+    }
+
+    public void setVacNameID(int vacNameID) {
+        this.vacNameID = vacNameID;
     }
 }

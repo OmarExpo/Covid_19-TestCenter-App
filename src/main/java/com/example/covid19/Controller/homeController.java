@@ -57,8 +57,12 @@ public class homeController {
     @GetMapping("/getCoronaPass")
     public String showCoronaPass(Model model){
         List<User> userList =repoInterface.fetchAllUser();
+        if (currentUser.getTsID()==0){
+            return "home/index";
+        }
+        else {
         Date today = new Date();
-        Date afterTomorrow = new Date(System.currentTimeMillis() + 86400 * 1000 * 3);
+        Date afterTomorrow = new Date(System.currentTimeMillis() + 86400 * 1000 * 2);
         model.addAttribute("today",today);
         model.addAttribute("afterTomorrow",afterTomorrow);
         model.addAttribute("userList",userList);
@@ -66,7 +70,8 @@ public class homeController {
         model.addAttribute("testStatus",testStatus);
 
 
-        return "home/getCoronaPass";
+        return "home/getCoronaPass";}
+
     }
 
 
@@ -82,6 +87,7 @@ public class homeController {
     @GetMapping("/index")
     public String showIndex(Model model){
        model.addAttribute("currentAppointment",currentAppointment);
+        model.addAttribute("TestCenterName",TestCenterName);
         return "home/index";
     }
     @GetMapping("/login")
@@ -233,14 +239,14 @@ public class homeController {
                 correct = true;
                 cpr1 = userList.get(i).getCpr();
                 currentUser = userList.get(i);
-                if(currentUser.getTestStatus().equals("null")){
-                    testStatus = "Not available";
+                if(currentUser.getTsID()==0){
+                    testStatus = "Not tested";
                 }
-                if(currentUser.getTestStatus().equals("1")){
-                    testStatus = "Negative";
-                }
-                if(currentUser.getTestStatus().equals("2")){
+                if(currentUser.getTsID()==1){
                     testStatus = "Positive";
+                }
+                if(currentUser.getTsID()==2){
+                    testStatus = "Negative";
                 }
                 System.out.println(cpr1);
                 /*
