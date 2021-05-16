@@ -9,6 +9,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 @Repository
@@ -67,6 +69,54 @@ public class RepoImple implements RepoInterface {
         return jdbcTemplate.query(sql, rowMapper1);
     }
 
+
+    public User updateUser(User user) {
+        String sqlQuery = "update User set " +
+                "name = ?, userName = ?,password = ?,cpr = ?, phone= ?, tcID = ?, vcID = ?, tsID = ?, vsID = ?, vacNameID = ? "+
+                "where userID = ?";
+        jdbcTemplate.update(sqlQuery
+                , user.getName()
+                , user.getUserName()
+                , user.getPassword()
+                , user.getCpr()
+                , user.getPhone()
+                ,user.getTcID()
+                ,user.getVcID()
+                ,user.getTsID()
+                ,user.getVsID()
+                ,user.getVacNameID()
+                ,user.getUserID());
+        return user;
+    }
+    public User fetchSingleUser(int id) {
+        String sql = "Select * from User where userID = ?";
+        return this.jdbcTemplate.queryForObject(sql, new RowMapper<User>(){
+            @Override
+            public User mapRow(ResultSet rs, int rownum) throws SQLException
+            {
+                User user = new User();
+                user.setUserID(rs.getInt(1));
+                user.setName(rs.getString(2));
+                user.setUserName(rs.getString(3));
+                user.setPassword(rs.getString(4));
+                user.setCpr(rs.getString(5));
+                user.setPhone(rs.getString(6));
+                user.setTcID(rs.getInt(7));
+                user.setVcID(rs.getInt(8));
+                user.setTsID(rs.getInt(9));
+                user.setVsID(rs.getInt(10));
+                user.setVacNameID(rs.getInt(11));
+                return user;
+            }},id); }
+
+
+
+    public boolean deleteUser(int id) {
+
+        String querry = "DELETE FROM User WHERE userID = ?";
+        jdbcTemplate.update(querry, id);
+        return true;
+    }
 
 
 }

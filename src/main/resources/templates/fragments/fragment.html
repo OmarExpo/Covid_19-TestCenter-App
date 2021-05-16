@@ -26,7 +26,6 @@
     </nav>
 </div>
 <div th:fragment="bootstrap">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -35,6 +34,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </div>
+
+
+
+<div th:fragment="testCenter">
+
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>Test center id</th>
+            <th>Test center name</th>
+        </tr>
+        <tr>
+            <td> 1</td>
+            <td> CPH-Center</td>
+        </tr>
+        <tr>
+            <td> 2</td>
+            <td> CPH-North</td>
+        </tr>
+        <tr>
+            <td> 3</td>
+            <td> CPH-South</td>
+        </tr>
+        <tr>
+            <td> 4</td>
+            <td> CPH-East</td>
+        </tr>
+        <tr>
+            <td> 5</td>
+            <td> CPH-West</td>
+        </tr>
+    </table>
+
+
+
+</div>
+
+
+<div th:fragment="dateFormater">
+
+
+    <script>
+        $(function () {
+            var dtToday = new Date();
+            var month = dtToday.getMonth() + 1;
+            var day = dtToday.getDate() + 2;
+            var day1 = dtToday.getDate() + 1;
+            var year = dtToday.getFullYear();
+            if (month < 10)
+                month = '0' + month.toString();
+            if (day < 10)
+                day = '0' + day.toString();
+            var maxDate = year + '-' + month + '-' + day;
+            var minDate = year + '-' + month + '-' + day1;
+            $('#mydate').attr('max', maxDate);
+            $('#mydate').attr('min', minDate);
+
+
+        });
+
+
+    </script>
+</div>
+
+
 <div th:fragment="cookies">
 
 

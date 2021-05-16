@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -34,15 +35,16 @@ public class homeController {
     public String showDashboard(){
         return "home/dashboard";
     }
+
     @GetMapping("/userByrole")
     public String showUserByrole(){
         return "home/userByrole";
     }
+
     @GetMapping("/chooseTestCenter")
     public String showChooseTestCenter(){
         return "home/chooseTestCenter";
     }
-
 
 
 
@@ -98,12 +100,12 @@ public class homeController {
     public ModelAndView login(@ModelAttribute LoginCheck loginCheck, Model model) {
 
         if ((loginCheck.getUserName().equals("admin")) && (loginCheck.getPassword().equals("admin123"))) {
-            ModelAndView modelAndView = new ModelAndView("home/dashboard");
+            ModelAndView modelAndView = new ModelAndView("administrator/administratorDash");
 
             return modelAndView;
 
         } else if ((loginCheck.getUserName().equals("secretary")) && (loginCheck.getPassword().equals("secretary123"))) {
-            ModelAndView modelAndView = new ModelAndView("home/dashboard");
+            ModelAndView modelAndView = new ModelAndView("secretary/secretaryDash");
 
             return modelAndView;
         } else if (logIncheck1(loginCheck.getUserName(), (loginCheck.getPassword()))) {
@@ -218,6 +220,45 @@ public class homeController {
        repoInterface.addAppointment(cpr1,tcID, day, month, year, hour, minute);
         return "home/makeAppointment";
     }
+    @GetMapping("/DirectAppointment")
+    public String makeDirectAppointment(@ModelAttribute DateAndTime dt, Model model) {
+
+        String cpr = dt.getCpr();
+        Date dateM = dt.getMydate();
+        String timeM = dt.getTime();
+        int tcID = dt.getTcID();
+        model.addAttribute("dateM",dateM);
+        model.addAttribute("timeM",timeM);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String strDate = formatter.format(dateM);
+        String day = strDate.substring(0, 2);
+        String month = strDate.substring(3, 5);
+        String year = strDate.substring(6);
+        String hour = timeM.substring(0, 2);
+        String minute = timeM.substring(3);
+
+        List<Appointment> appList = repoInterface.fetchAllAppointments();
+        model.addAttribute("appList",appList);
+        String cprError = "You have already an appointment on";
+        String timeMatch = "This time has already been taken by someone else please take another time. ";
+
+        for (int i = 0; i < appList.size(); i++) {
+            if (appList.get(i).getCpr().equals(cpr)) {
+                model.addAttribute("cprError", cprError);
+                currentAppointment = appList.get(i).getDay()+"-"+appList.get(i).getMonth()+"-"+appList.get(i).getYear()+" at "+appList.get(i).getHour()+":"+ appList.get(i).getMinute();
+                model.addAttribute("bookedAppointment",currentAppointment);
+                return "secretary/makeDirectAppointment";
+
+            } else if (appList.get(i).getDay().equals(day) && appList.get(i).getHour().equals(hour) && appList.get(i).getMinute().equals(minute) && appList.get(i).getTcID()== tcID) {
+                model.addAttribute("timeMatch", timeMatch);
+                return "secretary/makeDirectAppointment";
+            } else {
+                continue;
+            } }
+
+        repoInterface.addAppointment(cpr,tcID, day, month, year, hour, minute);
+        return "secretary/secretaryDash";
+    }
 
 
 
@@ -248,19 +289,53 @@ public class homeController {
                 if(currentUser.getTsID()==2){
                     testStatus = "Negative";
                 }
-                System.out.println(cpr1);
-                /*
-                currentUser.setName(userList.get(i).getName());
-                currentUser.setCpr(userList.get(i).getCpr());
-                currentUser.setPhone(userList.get(i).getPhone());
-                currentUser.setStatus(userList.get(i).getStatus());
-                currentUser.setAppointment(currentUser.getAppointment()); */
+
                 break;
             } else {
                 correct = false;
             }
         }
         return correct;
+    }
+    @GetMapping("/makeDirectAppointment")
+    public String showDirectAppointment(Model model) {
+        List<TimeSlots> mytimeSlots = repoInterface.fetchAllTimeSlots();
+        model.addAttribute("timeSlots",mytimeSlots);
+        return "secretary/makeDirectAppointment";
+    }
+    @GetMapping("/delete/{id}")
+    public String deleteMe(@PathVariable(value = "id") int id) {
+        repoInterface.deleteUser(id);
+        return ("redirect:/deleteUser");
+    }
+
+
+    @GetMapping("/deleteUser")
+    public String showDeleteUser(Model model) {
+        List<User> userList = repoInterface.fetchAllUser();
+        model.addAttribute("userList",userList);
+        return "administrator/deleteUser";
+    }
+
+    @GetMapping("/UpdateUserHome")
+    public String showUserUpdateHome(Model model) {
+        List<User> userList = repoInterface.fetchAllUser();
+        model.addAttribute("userList",userList);
+        return "secretary/UpdateUserHome";
+    }
+
+
+    @GetMapping("/updateHome/{id}")
+    public String showFormForUpdate(@PathVariable(value = "id") int id, Model md) {
+        User user = repoInterface.fetchSingleUser(id);
+        md.addAttribute("user", user);
+        return "secretary/userUpdatePage";
+    }
+
+    @PostMapping("/updateHome")
+    public String saveEmployee(@ModelAttribute("user") User user) {
+        this.repoInterface.updateUser(user);
+        return "redirect:/UpdateUserHome";
     }
 
 

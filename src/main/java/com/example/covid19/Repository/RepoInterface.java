@@ -14,5 +14,8 @@ public interface RepoInterface {
     public List<Appointment> fetchAllAppointments();
     public void addAppointment(String cpr,int tcID,String day,String month,String year,String hour,String minute);
     public List<TimeSlots> fetchAllTimeSlots();
+    public User fetchSingleUser(int id);
+    public User updateUser(User user);
+    public boolean deleteUser(int id);
 
 }
