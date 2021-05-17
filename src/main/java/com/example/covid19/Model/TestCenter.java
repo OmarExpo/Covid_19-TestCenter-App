@@ -1,13 +1,24 @@
 package com.example.covid19.Model;
 
 public class TestCenter {
+    int tcID;
     String cname;
 
     public TestCenter() {
     }
 
-    public TestCenter(String cname) {
+    public TestCenter(int tcID,String cname) {
+        this.tcID = tcID;
         this.cname = cname;
+
+    }
+
+    public int getTcID() {
+        return tcID;
+    }
+
+    public void setTcID(int tcID) {
+        this.tcID = tcID;
     }
 
     public String getCname() {

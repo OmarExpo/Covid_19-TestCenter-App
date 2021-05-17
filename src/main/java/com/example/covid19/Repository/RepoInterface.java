@@ -1,6 +1,7 @@
 package com.example.covid19.Repository;
 
 import com.example.covid19.Model.Appointment;
+import com.example.covid19.Model.TestCenter;
 import com.example.covid19.Model.TimeSlots;
 import com.example.covid19.Model.User;
 
@@ -17,5 +18,13 @@ public interface RepoInterface {
     public User fetchSingleUser(int id);
     public User updateUser(User user);
     public boolean deleteUser(int id);
+    public boolean deleteAppointment(long cpr);
+    public List<TestCenter> fetchTestCenter();
+    public TestCenter fetchTestCenterByCpr( long cpr);
+    public List<User>searchByName(String keyword);
+    public List<User> fetchAllNegative();
+    public List<User> fetchAllPositive();
+    public List<User> fetchAllByCpr(long cpr);
+
 
 }

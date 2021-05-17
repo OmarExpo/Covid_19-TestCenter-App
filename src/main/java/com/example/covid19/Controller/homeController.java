@@ -19,7 +19,7 @@ import java.util.List;
 public class homeController {
     String TestCenterName;
     String UserName;
-    int tcID;
+    int tcID=0;
     String cpr1="598358948935";
     User currentUser;
     String testStatus;
@@ -33,6 +33,23 @@ public class homeController {
 
     @GetMapping("/")
     public String showDashboard(){
+        List<Appointment> allAppointments = repoInterface.fetchAllAppointments();
+        Date myDate = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String strDate = formatter.format(myDate);
+        String day = strDate.substring(0, 2);
+        for(int i=0;i<allAppointments.size();i++){
+            if(Integer.parseInt(allAppointments.get(i).getDay())< Integer.parseInt(day)){
+                long cpr = Long.parseLong(allAppointments.get(i).getCpr());
+                repoInterface.deleteAppointment(cpr);
+
+
+            }
+
+        }
+
+
+
         return "home/dashboard";
     }
 
@@ -52,8 +69,19 @@ public class homeController {
     @GetMapping("/makeAppointment")
     public String showMakeAppointment(Model model){
         List<TimeSlots> mytimeSlots = repoInterface.fetchAllTimeSlots();
+        List<TestCenter> myCenters = repoInterface.fetchTestCenter();
+        List<Appointment> allAppointments = repoInterface.fetchAllAppointments();
+        String appointmentDetails="";
+        for(int i =0;i<allAppointments.size();i++){
+            if(allAppointments.get(i).getCpr().equals(currentUser.getCpr())){
+                appointmentDetails = "You have an appointment on  " + allAppointments.get(i).getDay()+"-"+allAppointments.get(i).getMonth()+"-"+allAppointments.get(i).getYear()+" at "+allAppointments.get(i).getHour()+":"+ allAppointments.get(i).getMinute();
+
+            }
+        }
+        model.addAttribute("appointmentDetails",appointmentDetails);
         model.addAttribute("timeSlots",mytimeSlots);
-        model.addAttribute("TestCenterName",TestCenterName);
+        model.addAttribute("myCenters",myCenters);
+        model.addAttribute("mytestcenter",TestCenterName);
         return "home/makeAppointment";
     }
     @GetMapping("/getCoronaPass")
@@ -70,8 +98,6 @@ public class homeController {
         model.addAttribute("userList",userList);
         model.addAttribute("myUser",currentUser);
         model.addAttribute("testStatus",testStatus);
-
-
         return "home/getCoronaPass";}
 
     }
@@ -110,10 +136,10 @@ public class homeController {
             return modelAndView;
         } else if (logIncheck1(loginCheck.getUserName(), (loginCheck.getPassword()))) {
             System.out.println(logIncheck1(loginCheck.getUserName(), (loginCheck.getPassword())));
-            ModelAndView modelAndView = new ModelAndView("home/index");
+            ModelAndView modelAndView = new ModelAndView("home/chooseTestCenter");
             UserName = loginCheck.getUserName();
             String vennueName = TestCenterName;
-            this.repoInterface.updateTestCenterId(cpr1,tcID);
+            //this.repoInterface.updateTestCenterId(cpr1,tcID);
 
            model.addAttribute("UserName",UserName);
            model.addAttribute("vennueName",vennueName);
@@ -137,6 +163,21 @@ public class homeController {
               model.addAttribute("error",error) ;
               return"home/signup";
            }
+
+           if(userList.get(i).getName().equals(user.getName())){
+               error = "This name is already in use, please add any charecter after your name";
+               model.addAttribute("error",error) ;
+               return"home/signup";
+           }
+           if(userList.get(i).getPassword().equals(user.getPassword())){
+               error = "This password  is not approved by our system, please provide diffrent password";
+               model.addAttribute("error",error) ;
+               return"home/signup";
+           }
+
+
+
+
            if(user.getCpr().length()!=10){
                error = "please provide valid cpr number without '-' 0101804949 (not valid -->010180-4949)";
                model.addAttribute("error",error) ;
@@ -158,25 +199,41 @@ public class homeController {
     }
     @PostMapping("/testCenterName")
     public String testme(@ModelAttribute TestCenter testCenter, Model model) {
+
        TestCenterName = testCenter.getCname();
+        System.out.println(TestCenterName);
        if(TestCenterName.equals("CPH-Center")){
            tcID =1;
+           repoInterface.updateTestCenterId(currentUser.getCpr(),tcID);
        }
         else if(TestCenterName.equals("CPH-North")){
             tcID =2;
+           repoInterface.updateTestCenterId(currentUser.getCpr(),tcID);
         }
        else if(TestCenterName.equals("CPH-South")){
            tcID =3;
+           repoInterface.updateTestCenterId(currentUser.getCpr(),tcID);
        }
        else if(TestCenterName.equals("CPH-East")){
            tcID =4;
+           repoInterface.updateTestCenterId(currentUser.getCpr(),tcID);
        }
        else{
            tcID = 5;
+           repoInterface.updateTestCenterId(currentUser.getCpr(),tcID);
        }
-
+       String userAppointment = "";
+        List<Appointment> allAppointments = repoInterface.fetchAllAppointments();
+       for(int i = 0;i<allAppointments.size();i++){
+           if (allAppointments.get(i).getCpr().equals(currentUser.getCpr())){
+               userAppointment =  allAppointments.get(i).getDay()+"-"+allAppointments.get(i).getMonth()+"-"+allAppointments.get(i).getYear()+" at "+allAppointments.get(i).getHour()+":"+ allAppointments.get(i).getMinute();
+           }
+       }
+        model.addAttribute("userAppointment",userAppointment);
        model.addAttribute("TestCenterName",TestCenterName);
-        return "home/login";
+       model.addAttribute("currentUser",currentUser.getUserName());
+
+        return "home/index";
     }
 
 
@@ -260,18 +317,6 @@ public class homeController {
         return "secretary/secretaryDash";
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     public boolean logIncheck1(String userName, String password) {
         boolean correct = false;
         List<User> userList = repoInterface.fetchAllUser();
@@ -338,7 +383,32 @@ public class homeController {
         return "redirect:/UpdateUserHome";
     }
 
-
+    @GetMapping("/searchByName")
+    public String searchByName(@ModelAttribute User val, Model model) {
+        String name = val.getName();
+        List<User> searchList = repoInterface.searchByName(name);
+        model.addAttribute("searchList", searchList);
+        return "secretary/searchByName";
+    }
+    @GetMapping("/searchByPositive")
+    public String searchByPositive(@ModelAttribute User val, Model model) {
+        List<User> positiveList = repoInterface.fetchAllPositive();
+        model.addAttribute("positiveList", positiveList);
+        return "secretary/searchByName";
+    }
+    @GetMapping("/searchByNegative")
+    public String searchByNegative(@ModelAttribute User val, Model model) {
+        List<User> negativeList = repoInterface.fetchAllNegative();
+        model.addAttribute("negativeList", negativeList);
+        return "secretary/searchByName";
+    }
+    @GetMapping("/searchByCpr")
+    public String searchByCpr(@ModelAttribute User val, Model model) {
+        long cprL = Long.parseLong(val.getCpr());
+        List<User> searchListCpr = repoInterface.fetchAllByCpr(cprL);
+        model.addAttribute("searchListCpr", searchListCpr);
+        return "secretary/searchByName";
+    }
 
 
 

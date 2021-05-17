@@ -1,6 +1,7 @@
 package com.example.covid19.Repository;
 
 import com.example.covid19.Model.Appointment;
+import com.example.covid19.Model.TestCenter;
 import com.example.covid19.Model.TimeSlots;
 import com.example.covid19.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,6 +118,54 @@ public class RepoImple implements RepoInterface {
         jdbcTemplate.update(querry, id);
         return true;
     }
+    public boolean deleteAppointment(long cpr) {
+        String sql = "DELETE FROM Appointment where cpr = ?";
+        jdbcTemplate.update(sql, cpr);
+        return true;
+    }
 
+    @Override
+    public List<TestCenter> fetchTestCenter() {
+        String sql = "SELECT * FROM TestCenter";
+        RowMapper<TestCenter> rowMapper2 = new BeanPropertyRowMapper<>(TestCenter.class);
+        return jdbcTemplate.query(sql, rowMapper2);
+    }
+
+    @Override
+    public TestCenter fetchTestCenterByCpr(long cpr) {
+        String sql = "SELECT tcID FROM Appointment Where cpr = ?";
+        return this.jdbcTemplate.queryForObject(sql, new RowMapper<TestCenter>(){
+            @Override
+            public TestCenter mapRow(ResultSet rs, int rownum) throws SQLException
+            {
+                TestCenter tc = new TestCenter();
+                tc.setTcID(rs.getInt(1));
+                tc.setCname(rs.getString(2));
+                return tc;
+            }},cpr);}
+@Override
+    public List<User> searchByName(String keyword){
+        String sql = "SELECT * FROM User WHERE name=?";
+        RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
+        return jdbcTemplate.query(sql,rowMapper,keyword);
+    }
+    public List<User> fetchAllPositive() {
+        String sql = "Select * from User where tsID = 1";
+        RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
+        return jdbcTemplate.query(sql, rowMapper);
+    }
+
+    @Override
+    public List<User> fetchAllByCpr(long cpr) {
+        String sql = "SELECT * FROM User WHERE cpr=?";
+        RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
+        return jdbcTemplate.query(sql,rowMapper,cpr);
+    }
+
+    public List<User> fetchAllNegative() {
+        String sql = "Select * from User where tsID = 2";
+        RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
+        return jdbcTemplate.query(sql, rowMapper);
+    }
 
 }

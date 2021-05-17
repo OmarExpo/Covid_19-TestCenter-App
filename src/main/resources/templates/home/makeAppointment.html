@@ -28,6 +28,17 @@
                 </div>
 
 
+
+                <div class="form-group">
+                    <label>Choose center: </label>
+                    <select select id="tcID" name="tcID" required>
+                        <option th:each="myC : ${myCenters}" th:value="${myC.tcID}" th:text="${myC.cname}"/>
+                    </select>
+                </div>
+
+
+
+
                 <div class="form-group">
                     <label>Choose time: </label>
                     <select select id="time" name="time" required>
@@ -49,6 +60,10 @@
             <hr>
 
         </table>
+
+
+        <h1 th:text="${appointmentDetails}"></h1>
+        <h1 th:text="${mytestcenter}"></h1>
 
 
                         <hr>
