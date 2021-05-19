@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -51,11 +52,20 @@ public class RepoImple implements RepoInterface {
         return jdbcTemplate.query(sql, rowMapper);
 
     }
+    public void addAppointment(String cpr, int tcID, LocalDateTime dateTime) {
+        String sql = "Insert into Appointment(cpr,tcID,localDateTime) values(?,?,?)";
+        jdbcTemplate.update(sql, cpr,tcID,dateTime);
+    }
+
+
+
+
+    /*
     public void addAppointment(String cpr,int tcID,String day,String month,String year,String hour,String minute) {
         String sql = "Insert into Appointment(cpr,tcID,day,month,year,hour,minute) values(?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql, cpr,tcID, day, month, year, hour, minute);
     }
-
+*/
     @Override
     public List<TimeSlots> fetchAllTimeSlots() {
         String sql = "Select * from TimeSlots";

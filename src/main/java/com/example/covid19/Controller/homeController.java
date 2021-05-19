@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class homeController {
 
     @Autowired
     RepoInterface repoInterface;
-
+//2021-05-21 09:10:00
 
 
     @GetMapping("/")
@@ -37,16 +39,23 @@ public class homeController {
         Date myDate = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String strDate = formatter.format(myDate);
+        String month = strDate.substring(3,5);
         String day = strDate.substring(0, 2);
-        for(int i=0;i<allAppointments.size();i++){
-            if(Integer.parseInt(allAppointments.get(i).getDay())< Integer.parseInt(day)){
+
+
+        for(int i=0;i<allAppointments.size();i++) {
+            String day1 = allAppointments.get(i).getLocalDateTime().toString().substring(8, 10);
+            String month1 = allAppointments.get(i).getLocalDateTime().toString().substring(5, 7);
+
+
+            if ((Integer.parseInt(day1) < Integer.parseInt(day)) && (Integer.parseInt(month) <= Integer.parseInt(month1))){
                 long cpr = Long.parseLong(allAppointments.get(i).getCpr());
                 repoInterface.deleteAppointment(cpr);
 
 
             }
-
         }
+
 
 
 
@@ -74,10 +83,11 @@ public class homeController {
         String appointmentDetails="";
         for(int i =0;i<allAppointments.size();i++){
             if(allAppointments.get(i).getCpr().equals(currentUser.getCpr())){
-                appointmentDetails = "You have an appointment on  " + allAppointments.get(i).getDay()+"-"+allAppointments.get(i).getMonth()+"-"+allAppointments.get(i).getYear()+" at "+allAppointments.get(i).getHour()+":"+ allAppointments.get(i).getMinute();
+                appointmentDetails = "You have an appointment on  " + allAppointments.get(i).getLocalDateTime().toString();
 
             }
         }
+        model.addAttribute("allAppointments",allAppointments);
         model.addAttribute("appointmentDetails",appointmentDetails);
         model.addAttribute("timeSlots",mytimeSlots);
         model.addAttribute("myCenters",myCenters);
@@ -226,7 +236,7 @@ public class homeController {
         List<Appointment> allAppointments = repoInterface.fetchAllAppointments();
        for(int i = 0;i<allAppointments.size();i++){
            if (allAppointments.get(i).getCpr().equals(currentUser.getCpr())){
-               userAppointment =  allAppointments.get(i).getDay()+"-"+allAppointments.get(i).getMonth()+"-"+allAppointments.get(i).getYear()+" at "+allAppointments.get(i).getHour()+":"+ allAppointments.get(i).getMinute();
+               userAppointment =  allAppointments.get(i).getLocalDateTime().toString();
            }
        }
         model.addAttribute("userAppointment",userAppointment);
@@ -235,48 +245,50 @@ public class homeController {
 
         return "home/index";
     }
+// changing code here
+@GetMapping("/takeDate")
+public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
 
+    String cpr = dt.getCpr();
+    Date dateM = dt.getMydate();
+    String timeM = dt.getTime();
+    model.addAttribute("dateM",dateM);
+    model.addAttribute("timeM",timeM);
+    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+    String strDate = formatter.format(dateM);
+    String day = strDate.substring(0, 2);
+    String month = strDate.substring(3, 5);
+    String year = strDate.substring(6);
+    String hour = timeM.substring(0, 2);
+    String minute = timeM.substring(3);
+    String receivedDate = year+"-"+month+"-"+day+" "+hour+":"+minute+":00";
 
+    String str = (year +"-"+month+"-"+day+" "+hour+":"+minute);
+    DateTimeFormatter dtf=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    LocalDateTime dateTime = LocalDateTime.parse(str,dtf);
 
+    List<Appointment> appList = repoInterface.fetchAllAppointments();
+    model.addAttribute("appList",appList);
+    String cprError = "You have already an appointment on";
+    String timeMatch = "This time has already been taken by someone else please take another time. ";
 
-    @GetMapping("/takeDate")
-    public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
+    for (int i = 0; i < appList.size(); i++) {
+        if (appList.get(i).getCpr().equals(cpr1)) {
+            model.addAttribute("cprError", cprError);
+            currentAppointment = " "+appList.get(i).getLocalDateTime().toString()+" ";
+            model.addAttribute("bookedAppointment",currentAppointment);
+            return "home/makeAppointment";
 
-        String cpr = dt.getCpr();
-        Date dateM = dt.getMydate();
-        String timeM = dt.getTime();
-        model.addAttribute("dateM",dateM);
-        model.addAttribute("timeM",timeM);
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        String strDate = formatter.format(dateM);
-        String day = strDate.substring(0, 2);
-        String month = strDate.substring(3, 5);
-        String year = strDate.substring(6);
-        String hour = timeM.substring(0, 2);
-        String minute = timeM.substring(3);
+        } else if (appList.get(i).getLocalDateTime().toString().equals(receivedDate) && appList.get(i).getTcID()== tcID) {
+            model.addAttribute("timeMatch", timeMatch);
+            return "home/makeAppointment";
+        } else {
+            continue;
+        } }
 
-        List<Appointment> appList = repoInterface.fetchAllAppointments();
-        model.addAttribute("appList",appList);
-        String cprError = "You have already an appointment on";
-        String timeMatch = "This time has already been taken by someone else please take another time. ";
-
-        for (int i = 0; i < appList.size(); i++) {
-            if (appList.get(i).getCpr().equals(cpr1)) {
-                model.addAttribute("cprError", cprError);
-                currentAppointment = appList.get(i).getDay()+"-"+appList.get(i).getMonth()+"-"+appList.get(i).getYear()+" at "+appList.get(i).getHour()+":"+ appList.get(i).getMinute();
-                model.addAttribute("bookedAppointment",currentAppointment);
-                return "home/makeAppointment";
-
-            } else if (appList.get(i).getDay().equals(day) && appList.get(i).getHour().equals(hour) && appList.get(i).getMinute().equals(minute) && appList.get(i).getTcID()== tcID) {
-                model.addAttribute("timeMatch", timeMatch);
-                return "home/makeAppointment";
-            } else {
-                continue;
-            } }
-
-       repoInterface.addAppointment(cpr1,tcID, day, month, year, hour, minute);
-        return "home/makeAppointment";
-    }
+    repoInterface.addAppointment(cpr1,tcID,dateTime);
+    return "home/makeAppointment";
+}
     @GetMapping("/DirectAppointment")
     public String makeDirectAppointment(@ModelAttribute DateAndTime dt, Model model) {
 
@@ -294,6 +306,12 @@ public class homeController {
         String hour = timeM.substring(0, 2);
         String minute = timeM.substring(3);
 
+        String receivedDate = year+"-"+month+"-"+day+" "+hour+":"+minute+":00";
+
+        String str = (year +"-"+month+"-"+day+" "+hour+":"+minute);
+        DateTimeFormatter dtf= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dateTime = LocalDateTime.parse(str,dtf);
+
         List<Appointment> appList = repoInterface.fetchAllAppointments();
         model.addAttribute("appList",appList);
         String cprError = "You have already an appointment on";
@@ -302,20 +320,25 @@ public class homeController {
         for (int i = 0; i < appList.size(); i++) {
             if (appList.get(i).getCpr().equals(cpr)) {
                 model.addAttribute("cprError", cprError);
-                currentAppointment = appList.get(i).getDay()+"-"+appList.get(i).getMonth()+"-"+appList.get(i).getYear()+" at "+appList.get(i).getHour()+":"+ appList.get(i).getMinute();
+                currentAppointment = appList.get(i).getLocalDateTime().toString();
+                //currentAppointment = appList.get(i).getDay()+"-"+appList.get(i).getMonth()+"-"+appList.get(i).getYear()+" at "+appList.get(i).getHour()+":"+ appList.get(i).getMinute();
                 model.addAttribute("bookedAppointment",currentAppointment);
                 return "secretary/makeDirectAppointment";
 
-            } else if (appList.get(i).getDay().equals(day) && appList.get(i).getHour().equals(hour) && appList.get(i).getMinute().equals(minute) && appList.get(i).getTcID()== tcID) {
+            } else if (appList.get(i).getLocalDateTime().toString().equals(receivedDate) && appList.get(i).getTcID()== tcID) {
                 model.addAttribute("timeMatch", timeMatch);
                 return "secretary/makeDirectAppointment";
             } else {
                 continue;
             } }
 
-        repoInterface.addAppointment(cpr,tcID, day, month, year, hour, minute);
+        repoInterface.addAppointment(cpr,tcID,dateTime);
         return "secretary/secretaryDash";
     }
+
+
+
+
 
     public boolean logIncheck1(String userName, String password) {
         boolean correct = false;

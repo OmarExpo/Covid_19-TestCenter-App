@@ -5,6 +5,7 @@ import com.example.covid19.Model.TestCenter;
 import com.example.covid19.Model.TimeSlots;
 import com.example.covid19.Model.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface RepoInterface {
@@ -13,7 +14,8 @@ public interface RepoInterface {
     public int updateTestCenterId(String cpr,int tcID);
     public List<User> fetchCpr();
     public List<Appointment> fetchAllAppointments();
-    public void addAppointment(String cpr,int tcID,String day,String month,String year,String hour,String minute);
+    public void addAppointment(String cpr, int tcID, LocalDateTime dateTime);
+    //public void addAppointment(String cpr,int tcID,String day,String month,String year,String hour,String minute);
     public List<TimeSlots> fetchAllTimeSlots();
     public User fetchSingleUser(int id);
     public User updateUser(User user);

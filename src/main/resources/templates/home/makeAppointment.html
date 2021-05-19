@@ -94,24 +94,19 @@
                             <h6>These time slots are already taken please take different time slot than below</h6>
 
                             <tr>
-                                <th>Year</th>
-                                <th>Month</th>
-                                <th>Day</th>
-                                <th>Hour</th>
-                                <th>Minute</th>
+
+                                <th>date and time</th>
                                 <th>Test Center Id</th>
 
 
                             </tr>
-                            <tr th:each="t2 : ${appList}">
-                                <td th:text="${t2.getYear()}"></td>
-                                <td th:text="${t2.getMonth()}"></td>
-                                <td th:text="${t2.getDay()}"></td>
-                                <td th:text="${t2.getHour()}"></td>
-                                <td th:text="${t2.getMinute()}"></td>
-                                <td th:text="${t2.getTcID()}"></td>
+                            <tr th:each="t : ${allAppointments}">
+
+                                <td th:text="${t.getLocalDateTime()}"></td>
+                                <td th:text="${t.getTcID}"></td>
 
                             </tr>
+
                         </table>
                     </div>
                 </div>
