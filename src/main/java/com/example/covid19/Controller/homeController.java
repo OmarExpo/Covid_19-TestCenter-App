@@ -156,7 +156,13 @@ public class homeController {
             ModelAndView modelAndView = new ModelAndView("secretary/secretaryDash");
 
             return modelAndView;
-        } else if (logIncheck1(loginCheck.getUserName(), (loginCheck.getPassword()))) {
+        } else if ((loginCheck.getUserName().equals("secretaryI")) && (loginCheck.getPassword().equals("si123"))) {
+            ModelAndView modelAndView = new ModelAndView("infectionCenter/secretaryIdash");
+
+            return modelAndView;
+        }
+
+        else if (logIncheck1(loginCheck.getUserName(), (loginCheck.getPassword()))) {
             System.out.println(logIncheck1(loginCheck.getUserName(), (loginCheck.getPassword())));
             ModelAndView modelAndView = new ModelAndView("home/chooseTestCenter");
             UserName = loginCheck.getUserName();
@@ -416,6 +422,10 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
     public String saveEmployee(@ModelAttribute("user") User user) {
         this.repoInterface.updateUser(user);
         return "redirect:/UpdateUserHome";
+    }
+    @GetMapping("/infectionDash")
+    public String showInfectionDash(){
+        return "infectionCenter/infectionDash";
     }
 
     @GetMapping("/searchByName")
