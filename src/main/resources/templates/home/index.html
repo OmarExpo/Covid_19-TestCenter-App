@@ -15,11 +15,12 @@
     </style>
 
 </head>
-<body style="background-color: rgb(109,109,109)">
+<body style="background-color: darkcyan">
+
 
 <div th:replace="fragments/fragment :: mynavbar"></div>
 <hr>
-
+<div th:replace="fragments/fragment :: goBack"></div>
 <div  id="div1">
     <div class="row">
         <div class="col-m-12">
@@ -28,14 +29,15 @@
                     <hr>
                     <h6 style="color:#FF00FF" th:text=" 'User name:- ' + ${currentUser} + '  Your selected location is:-  ' + ${TestCenterName}"></h6>
                     <hr>
-                    <h6 th:text="'You have appointment On        ' + ${userAppointment}"></h6>
+                    <h6  th:text="'Your appointment: ' + ${userAppointment}"></h6>
                     <hr>
+                    <h3 th:text="'      ' + ${haMessage}"></h3>
+
                 </div>
             </div>
         </div>
-
-
-
+    </div>
+</div>
 
 </body>
 </html>

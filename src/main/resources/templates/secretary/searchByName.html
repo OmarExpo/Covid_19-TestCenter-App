@@ -16,6 +16,7 @@
 <body>
 <hr>
 <h2> Search By Name</h2>
+<div th:replace="fragments/fragment :: goBack"></div>
 <form  method="get" action="#" th:action="@{/searchByName}">
     <label>name</label><input type="text" name="name" placeholder="Enter name" required>
     <input type="submit">

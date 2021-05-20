@@ -9,82 +9,64 @@
 
 </head>
 <body>
-
-
+<div th:replace="fragments/fragment :: goBack"></div>
 <div id="div1">
-    <div class="row">
-        <div class="col-m-6">
-            <div class="card">
-                <div class="card-body">
-                    <h1 class="card-title" >Center</h1>
-                    <div>
-                        <form method="post" action="/testCenterName">
-                            <input type="text" class="form-control"  name="cname" value="CPH-Center" hidden>
-                            <button  type="submit" class="btn btn-primary">Submit</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-m-6">
-            <div class="card">
-                <div class="card-body">
-                    <h1 class="card-title">North</h1>
-                    <div>
-                        <form method="post" action="/testCenterName">
-                            <input type="text" class="form-control"  name="cname" value="CPH-North" hidden>
-                            <button  type="submit" class="btn btn-primary">Submit</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-m-6">
-            <div class="card">
-                <div class="card-body">
-                    <h1 class="card-title">South</h1>
-                    <div>
-                        <form method="post" action="/testCenterName">
-                            <input type="text" class="form-control"  name="cname" value="CPH-South" hidden>
-                            <button  type="submit" class="btn btn-primary">Submit</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-m-6">
-            <div class="card">
-                <div class="card-body">
-                    <h1 class="card-title">East</h1>
-                    <div>
-                        <form method="post" action="/testCenterName">
-                            <input type="text" class="form-control"  name="cname" value="CPH-East" hidden>
-                            <button  type="submit" class="btn btn-primary">Submit</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-m-6">
-            <div class="card">
-                <div class="card-body">
-                    <h1 class="card-title">West</h1>
-                    <div>
-                        <form method="post" action="/testCenterName">
-                            <input type="text" class="form-control"  name="cname" value="CPH-West" hidden>
-                            <button  type="submit" class="btn btn-primary">Submit</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">CPH-Center</h1>
+        <form method="post" action="/testCenterName">
+            <input type="text" class="form-control"  name="cname" value="CPH-Center" hidden>
+            <button  type="submit" class="btn btn-primary">Submit</button>
+        </form>
     </div>
 </div>
+<hr>
+
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">CPH-North</h1>
+        <form method="post" action="/testCenterName">
+            <input type="text" class="form-control"  name="cname" value="CPH-North" hidden>
+            <button  type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
 </div>
+<hr>
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">CPH-South</h1>
+            <form method="post" action="/testCenterName">
+                <input type="text" class="form-control"  name="cname" value="CPH-South" hidden>
+                <button  type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+<hr>
+
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">CPH-East</h1>
+                <form method="post" action="/testCenterName">
+                    <input type="text" class="form-control"  name="cname" value="CPH-East" hidden>
+                    <button  type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+<hr>
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title">CPH-West</h1>
+                    <form method="post" action="/testCenterName">
+                    <input type="text" class="form-control"  name="cname" value="CPH-West" hidden>
+                    <button  type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                </div>
+            </div>
+
+            </div>
+
+
+
+
 </body>
 </html>

@@ -11,6 +11,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -30,11 +36,12 @@ public class homeController {
 
     @Autowired
     RepoInterface repoInterface;
-//2021-05-21 09:10:00
+
 
 
     @GetMapping("/")
-    public String showDashboard(){
+    public String showDashboard() throws IOException{
+
         List<Appointment> allAppointments = repoInterface.fetchAllAppointments();
         Date myDate = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -42,6 +49,7 @@ public class homeController {
         String month = strDate.substring(3,5);
         String day = strDate.substring(0, 2);
 
+        saveLogs(myDate.toString() +"\n"+getIpAddress());
 
         for(int i=0;i<allAppointments.size();i++) {
             String day1 = allAppointments.get(i).getLocalDateTime().toString().substring(8, 10);
@@ -95,20 +103,24 @@ public class homeController {
         return "home/makeAppointment";
     }
     @GetMapping("/getCoronaPass")
-    public String showCoronaPass(Model model){
-        List<User> userList =repoInterface.fetchAllUser();
-        if (currentUser.getTsID()==0){
+    public String showCoronaPass(Model model) {
+        List<User> userList = repoInterface.fetchAllUser();
+        if (currentUser.getTsID() == 0) {
+            model.addAttribute("haMessage", "Message from health authorities: \nYou are not tested yet please make a test to get corona pass");
             return "home/index";
+        } else if (currentUser.getTsID() == 1) {
+            model.addAttribute("haMessage", "Message from health authorities: \nYour status is positive please get isolated and contact your own doctor.");
+            return "home/index";
+        } else {
+            Date today = new Date();
+            Date afterTomorrow = new Date(System.currentTimeMillis() + 86400 * 1000 * 2);
+            model.addAttribute("today", today);
+            model.addAttribute("afterTomorrow", afterTomorrow);
+            model.addAttribute("userList", userList);
+            model.addAttribute("myUser", currentUser);
+            model.addAttribute("testStatus", testStatus);
+            return "home/getCoronaPass";
         }
-        else {
-        Date today = new Date();
-        Date afterTomorrow = new Date(System.currentTimeMillis() + 86400 * 1000 * 2);
-        model.addAttribute("today",today);
-        model.addAttribute("afterTomorrow",afterTomorrow);
-        model.addAttribute("userList",userList);
-        model.addAttribute("myUser",currentUser);
-        model.addAttribute("testStatus",testStatus);
-        return "home/getCoronaPass";}
 
     }
 
@@ -425,6 +437,12 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
         model.addAttribute("negativeList", negativeList);
         return "secretary/searchByName";
     }
+
+    @GetMapping("/secretaryDash")
+    public String showSecretaryDash() {
+
+        return "secretary/secretaryDash";
+    }
     @GetMapping("/searchByCpr")
     public String searchByCpr(@ModelAttribute User val, Model model) {
         long cprL = Long.parseLong(val.getCpr());
@@ -434,7 +452,24 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
     }
 
 
+    public void saveLogs(String myLogs) throws IOException {
+       try {
+           File file = new File("log.txt");
+           BufferedWriter out = new BufferedWriter(new FileWriter(file));
+           out.write(myLogs);
+           out.close();
+       }catch (IOException e){
+           e.printStackTrace();
+       }
+    }
 
+    // source of inspiration https://stackoverflow.com/questions/9481865/getting-the-ip-address-of-the-current-machine-using-java
+
+public String getIpAddress() throws UnknownHostException {
+    InetAddress IP= InetAddress.getLocalHost();
+    String ip ="Local ip address of user machine := "+IP.getHostAddress();
+        return ip;
+}
 
 
 

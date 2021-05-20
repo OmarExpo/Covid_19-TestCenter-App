@@ -13,6 +13,7 @@
                 padding: 0;
             }
             body {
+                margin:20%;
                 color: black;
                 display: table;
                 font-family: Georgia, serif;
@@ -30,14 +31,12 @@
                 color: tan;
             }
 
-            .marquee {
+            .titleClass {
                 color: tan;
                 font-size: 48px;
                 margin: 20px;
             }
-            .assignment {
-                margin: 20px;
-            }
+
             .person {
                 border-bottom: 2px solid black;
                 font-size: 32px;
@@ -45,9 +44,7 @@
                 margin: 20px auto;
                 width: 400px;
             }
-            .reason {
-                margin: 20px;
-            }
+
             h6{
                 color: blue;
                 text-shadow: blue;
@@ -57,10 +54,11 @@
     </head>
 <body>
 <div id="maindiv">
+    <div th:replace="fragments/fragment :: goBack"></div>
     <div class="container">
         <div class="logo">
             KEA 2nd Semester final project</div>
-        <div class="marquee">CoronaPass</div>
+        <div class="titleClass">CoronaPass</div>
         <label>Presented to:</label><div th:text="${myUser.getName()}" class="person"></div>
         <label>CPR: </label><div th:text="${myUser.getCpr()}" class="reason"></div>
         <label>Test type: PCR</label>
@@ -71,6 +69,7 @@
     </div>
 </div>
 <hr>
+
 <button style="float: right" onclick="window.printDiv(maindiv)"><h3>Print Pass</h3></button>
 <script>
     function printDiv(maindiv) {

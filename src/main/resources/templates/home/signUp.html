@@ -43,7 +43,8 @@
 </head>
 <body>
 <div class="main">
-    <h1 style="text-align: center"> Register </h1>
+    <h1 style="text-align: center"> Register </h1>'
+    <div th:replace="fragments/fragment :: goBack"></div>
     <table>
         <form method="post" action="/createList" th:object="${User}">
             <div class="form-group">
