@@ -2,6 +2,7 @@ package com.example.covid19.Controller;
 
 import com.example.covid19.Model.*;
 import com.example.covid19.Repository.RepoInterface;
+import com.example.covid19.Service.ServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,14 +36,14 @@ public class homeController {
 
 
     @Autowired
-    RepoInterface repoInterface;
+    ServiceInterface serviceInterface;
 
 
 
     @GetMapping("/")
     public String showDashboard() throws IOException{
 
-        List<Appointment> allAppointments = repoInterface.fetchAllAppointments();
+        List<Appointment> allAppointments = serviceInterface.fetchAllAppointments();
         Date myDate = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String strDate = formatter.format(myDate);
@@ -58,7 +59,7 @@ public class homeController {
 
             if ((Integer.parseInt(day1) < Integer.parseInt(day)) && (Integer.parseInt(month) <= Integer.parseInt(month1))){
                 long cpr = Long.parseLong(allAppointments.get(i).getCpr());
-                repoInterface.deleteAppointment(cpr);
+                serviceInterface.deleteAppointment(cpr);
 
 
             }
@@ -85,9 +86,9 @@ public class homeController {
 
     @GetMapping("/makeAppointment")
     public String showMakeAppointment(Model model){
-        List<TimeSlots> mytimeSlots = repoInterface.fetchAllTimeSlots();
-        List<TestCenter> myCenters = repoInterface.fetchTestCenter();
-        List<Appointment> allAppointments = repoInterface.fetchAllAppointments();
+        List<TimeSlots> mytimeSlots = serviceInterface.fetchAllTimeSlots();
+        List<TestCenter> myCenters = serviceInterface.fetchTestCenter();
+        List<Appointment> allAppointments = serviceInterface.fetchAllAppointments();
         String appointmentDetails="";
         for(int i =0;i<allAppointments.size();i++){
             if(allAppointments.get(i).getCpr().equals(currentUser.getCpr())){
@@ -104,7 +105,7 @@ public class homeController {
     }
     @GetMapping("/getCoronaPass")
     public String showCoronaPass(Model model) {
-        List<User> userList = repoInterface.fetchAllUser();
+        List<User> userList = serviceInterface.fetchAllUser();
         if (currentUser.getTsID() == 0) {
             model.addAttribute("haMessage", "Message from health authorities: \nYou are not tested yet please make a test to get corona pass");
             return "home/index";
@@ -184,7 +185,7 @@ public class homeController {
     public String create(@ModelAttribute User user,Model model) {
         String error = "";
 
-       List<User> userList =repoInterface.fetchAllUser();
+       List<User> userList =serviceInterface.fetchAllUser();
        for(int i=0;i<userList.size();i++){
            if(userList.get(i).getCpr().equals(user.getCpr())){
                error = "This cpr is already in use, please veryfi cpr number if it is correct you have already signedUp kindly go to login page.";
@@ -221,7 +222,7 @@ public class homeController {
            }
        }
 
-        this.repoInterface.addUser(user);
+        this.serviceInterface.addUser(user);
 
         return "home/login";
     }
@@ -232,26 +233,26 @@ public class homeController {
         System.out.println(TestCenterName);
        if(TestCenterName.equals("CPH-Center")){
            tcID =1;
-           repoInterface.updateTestCenterId(currentUser.getCpr(),tcID);
+           serviceInterface.updateTestCenterId(currentUser.getCpr(),tcID);
        }
         else if(TestCenterName.equals("CPH-North")){
             tcID =2;
-           repoInterface.updateTestCenterId(currentUser.getCpr(),tcID);
+           serviceInterface.updateTestCenterId(currentUser.getCpr(),tcID);
         }
        else if(TestCenterName.equals("CPH-South")){
            tcID =3;
-           repoInterface.updateTestCenterId(currentUser.getCpr(),tcID);
+           serviceInterface.updateTestCenterId(currentUser.getCpr(),tcID);
        }
        else if(TestCenterName.equals("CPH-East")){
            tcID =4;
-           repoInterface.updateTestCenterId(currentUser.getCpr(),tcID);
+           serviceInterface.updateTestCenterId(currentUser.getCpr(),tcID);
        }
        else{
            tcID = 5;
-           repoInterface.updateTestCenterId(currentUser.getCpr(),tcID);
+           serviceInterface.updateTestCenterId(currentUser.getCpr(),tcID);
        }
        String userAppointment = "";
-        List<Appointment> allAppointments = repoInterface.fetchAllAppointments();
+        List<Appointment> allAppointments = serviceInterface.fetchAllAppointments();
        for(int i = 0;i<allAppointments.size();i++){
            if (allAppointments.get(i).getCpr().equals(currentUser.getCpr())){
                userAppointment =  allAppointments.get(i).getLocalDateTime().toString();
@@ -285,7 +286,7 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
     DateTimeFormatter dtf=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     LocalDateTime dateTime = LocalDateTime.parse(str,dtf);
 
-    List<Appointment> appList = repoInterface.fetchAllAppointments();
+    List<Appointment> appList = serviceInterface.fetchAllAppointments();
     model.addAttribute("appList",appList);
     String cprError = "You have already an appointment on";
     String timeMatch = "This time has already been taken by someone else please take another time. ";
@@ -304,7 +305,7 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
             continue;
         } }
 
-    repoInterface.addAppointment(cpr1,tcID,dateTime);
+    serviceInterface.addAppointment(cpr1,tcID,dateTime);
     return "home/makeAppointment";
 }
     @GetMapping("/DirectAppointment")
@@ -330,7 +331,7 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
         DateTimeFormatter dtf= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime dateTime = LocalDateTime.parse(str,dtf);
 
-        List<Appointment> appList = repoInterface.fetchAllAppointments();
+        List<Appointment> appList = serviceInterface.fetchAllAppointments();
         model.addAttribute("appList",appList);
         String cprError = "You have already an appointment on";
         String timeMatch = "This time has already been taken by someone else please take another time. ";
@@ -350,7 +351,7 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
                 continue;
             } }
 
-        repoInterface.addAppointment(cpr,tcID,dateTime);
+        serviceInterface.addAppointment(cpr,tcID,dateTime);
         return "secretary/secretaryDash";
     }
 
@@ -360,7 +361,7 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
 
     public boolean logIncheck1(String userName, String password) {
         boolean correct = false;
-        List<User> userList = repoInterface.fetchAllUser();
+        List<User> userList = serviceInterface.fetchAllUser();
         for (int i = 0; i < userList.size(); i++) {
             if ((userList.get(i).getUserName().equals(userName)) && (userList.get(i).getPassword().equals(password))) {
                 correct = true;
@@ -385,27 +386,27 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
     }
     @GetMapping("/makeDirectAppointment")
     public String showDirectAppointment(Model model) {
-        List<TimeSlots> mytimeSlots = repoInterface.fetchAllTimeSlots();
+        List<TimeSlots> mytimeSlots = serviceInterface.fetchAllTimeSlots();
         model.addAttribute("timeSlots",mytimeSlots);
         return "secretary/makeDirectAppointment";
     }
     @GetMapping("/delete/{id}")
     public String deleteMe(@PathVariable(value = "id") int id) {
-        repoInterface.deleteUser(id);
+        serviceInterface.deleteUser(id);
         return ("redirect:/deleteUser");
     }
 
 
     @GetMapping("/deleteUser")
     public String showDeleteUser(Model model) {
-        List<User> userList = repoInterface.fetchAllUser();
+        List<User> userList = serviceInterface.fetchAllUser();
         model.addAttribute("userList",userList);
         return "administrator/deleteUser";
     }
 
     @GetMapping("/UpdateUserHome")
     public String showUserUpdateHome(Model model) {
-        List<User> userList = repoInterface.fetchAllUser();
+        List<User> userList = serviceInterface.fetchAllUser();
         model.addAttribute("userList",userList);
         return "secretary/UpdateUserHome";
     }
@@ -413,14 +414,14 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
 
     @GetMapping("/updateHome/{id}")
     public String showFormForUpdate(@PathVariable(value = "id") int id, Model md) {
-        User user = repoInterface.fetchSingleUser(id);
+        User user = serviceInterface.fetchSingleUser(id);
         md.addAttribute("user", user);
         return "secretary/userUpdatePage";
     }
 
     @PostMapping("/updateHome")
     public String saveEmployee(@ModelAttribute("user") User user) {
-        this.repoInterface.updateUser(user);
+        this.serviceInterface.updateUser(user);
         return "redirect:/UpdateUserHome";
     }
     @GetMapping("/infectionDash")
@@ -431,19 +432,19 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
     @GetMapping("/searchByName")
     public String searchByName(@ModelAttribute User val, Model model) {
         String name = val.getName();
-        List<User> searchList = repoInterface.searchByName(name);
+        List<User> searchList = serviceInterface.searchByName(name);
         model.addAttribute("searchList", searchList);
         return "secretary/searchByName";
     }
     @GetMapping("/searchByPositive")
     public String searchByPositive(@ModelAttribute User val, Model model) {
-        List<User> positiveList = repoInterface.fetchAllPositive();
+        List<User> positiveList = serviceInterface.fetchAllPositive();
         model.addAttribute("positiveList", positiveList);
         return "secretary/searchByName";
     }
     @GetMapping("/searchByNegative")
     public String searchByNegative(@ModelAttribute User val, Model model) {
-        List<User> negativeList = repoInterface.fetchAllNegative();
+        List<User> negativeList = serviceInterface.fetchAllNegative();
         model.addAttribute("negativeList", negativeList);
         return "secretary/searchByName";
     }
@@ -456,7 +457,7 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
     @GetMapping("/searchByCpr")
     public String searchByCpr(@ModelAttribute User val, Model model) {
         long cprL = Long.parseLong(val.getCpr());
-        List<User> searchListCpr = repoInterface.fetchAllByCpr(cprL);
+        List<User> searchListCpr = serviceInterface.fetchAllByCpr(cprL);
         model.addAttribute("searchListCpr", searchListCpr);
         return "secretary/searchByName";
     }

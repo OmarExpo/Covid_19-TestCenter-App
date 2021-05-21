@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://thymeleaf.org">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <div th:replace="fragments/fragment :: bootstrap"></div>
     <title>User info details</title>
+    <!---
     <style>
         body{
             background-color: rgb(109,109,109);
@@ -11,198 +12,229 @@
             background-color: cornsilk;
         }
     </style>
-
+---->
+    <div th:replace="fragments/fragment :: cssDash"></div>
 </head>
 <body>
-<hr>
-<h2> Search By Name</h2>
-<div th:replace="fragments/fragment :: goBack"></div>
-<form  method="get" action="#" th:action="@{/searchByName}">
-    <label>name</label><input type="text" name="name" placeholder="Enter name" required>
-    <input type="submit">
-</form>
-<hr>
-<div id="maindiv">
+<div  id="div1">
+
     <div class="card">
         <div class="card-body">
-            <div>
-                <table border="1" cellpadding="10">
-                    <br/><br/>
-                    <tr>
-                        <th>Full name</th>
-                        <th>User name</th>
-                        <th>password</th>
-                        <th>cpr</th>
-                        <th>Phone</th>
-                        <th>TestCenterID</th>
-                        <th>VaccinCenterID</th>
-                        <th>TestStatusID</th>
-                        <th>VaccinStatusID</th>
-                        <th>VaccinNameID</th>
+            <hr>
+            <h2> Search By Name</h2>
+            <div th:replace="fragments/fragment :: goBack"></div>
+            <br>
+            <hr>
+            <form  method="get" action="#" th:action="@{/searchByName}">
+                <label>name</label><input type="text" name="name" placeholder="Enter name" required>
+                <input type="submit">
+            </form>
+            <hr>
+            <div id="maindiv">
+                <div class="card">
+                    <div class="card-body">
 
-                    </tr>
-                    <tr th:each="t1 : ${searchList}">
-                        <td th:text="${t1.getName()}"></td>
-                        <td th:text="${t1.getUserName()}"></td>
-                        <td th:text="${t1.getPassword()}"></td>
-                        <td th:text="${t1.getCpr()}"></td>
-                        <td th:text="${t1.getPhone()}"></td>
-                        <td th:text="${t1.getTcID()}"></td>
-                        <td th:text="${t1.getVcID()}"></td>
-                        <td th:text="${t1.getTsID()}"></td>
-                        <td th:text="${t1.getVsID()}"></td>
-                        <td th:text="${t1.getVacNameID()}"></td>
-                        <td> <a th:href="@{/updateHome/{id}(id=${t1.userID})}" class="btn btn-primary"><button>Edit</button></a><label></label>
-                        </td>
-                    </tr>
-                </table>
+
+
+                        <div   style="overflow-x:auto;" >
+                            <table border="1" cellpadding="10" style="margin: auto">
+                                <br/><br/>
+                                <tr>
+                                    <th>Full name</th>
+                                    <th>User name</th>
+                                    <th>password</th>
+                                    <th>cpr</th>
+                                    <th>Phone</th>
+                                    <th>TestCenterID</th>
+                                    <th>VaccinCenterID</th>
+                                    <th>TestStatusID</th>
+                                    <th>VaccinStatusID</th>
+                                    <th>VaccinNameID</th>
+
+                                </tr>
+                                <tr th:each="t1 : ${searchList}">
+                                    <td th:text="${t1.getName()}"></td>
+                                    <td th:text="${t1.getUserName()}"></td>
+                                    <td th:text="${t1.getPassword()}"></td>
+                                    <td th:text="${t1.getCpr()}"></td>
+                                    <td th:text="${t1.getPhone()}"></td>
+                                    <td th:text="${t1.getTcID()}"></td>
+                                    <td th:text="${t1.getVcID()}"></td>
+                                    <td th:text="${t1.getTsID()}"></td>
+                                    <td th:text="${t1.getVsID()}"></td>
+                                    <td th:text="${t1.getVacNameID()}"></td>
+                                    <td> <a th:href="@{/updateHome/{id}(id=${t1.userID})}" class="btn btn-primary"><button>Edit</button></a><label></label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <hr>
+
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+            <h2> Search by potive</h2>
+            <form  method="get" action="#" th:action="@{/searchByPositive}">
+                <button type="submit">See all positive Status users</button>
+            </form>
+            <hr>
+            <div id="positiveDiv">
+                <div class="card">
+                    <div class="card-body">
+                        <div style="overflow-x:auto;">
+                            <table border="1" cellpadding="10">
+                                <br/><br/>
+                                <tr>
+                                    <th>Full name</th>
+                                    <th>User name</th>
+                                    <th>password</th>
+                                    <th>cpr</th>
+                                    <th>Phone</th>
+                                    <th>TestCenterID</th>
+                                    <th>VaccinCenterID</th>
+                                    <th>TestStatusID</th>
+                                    <th>VaccinStatusID</th>
+                                    <th>VaccinNameID</th>
+
+                                </tr>
+                                <tr th:each="t1 : ${positiveList}">
+                                    <td th:text="${t1.getName()}"></td>
+                                    <td th:text="${t1.getUserName()}"></td>
+                                    <td th:text="${t1.getPassword()}"></td>
+                                    <td th:text="${t1.getCpr()}"></td>
+                                    <td th:text="${t1.getPhone()}"></td>
+                                    <td th:text="${t1.getTcID()}"></td>
+                                    <td th:text="${t1.getVcID()}"></td>
+                                    <td th:text="${t1.getTsID()}"></td>
+                                    <td th:text="${t1.getVsID()}"></td>
+                                    <td th:text="${t1.getVacNameID()}"></td>
+                                    <td> <a th:href="@{/updateHome/{id}(id=${t1.userID})}" class="btn btn-primary"><button>Edit</button></a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <hr>
+
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+            <h2> Search by Negative</h2>
+            <form  method="get" action="#" th:action="@{/searchByNegative}">
+                <button type="submit">See all Negative Status Users</button>
+            </form>
+            <hr>
+            <div id="negativeDiv">
+                <div class="card">
+                    <div class="card-body">
+                        <div style="overflow-x:auto;">
+                            <table border="1" cellpadding="10">
+                                <br/><br/>
+                                <tr>
+                                    <th>Full name</th>
+                                    <th>User name</th>
+                                    <th>password</th>
+                                    <th>cpr</th>
+                                    <th>Phone</th>
+                                    <th>TestCenterID</th>
+                                    <th>VaccinCenterID</th>
+                                    <th>TestStatusID</th>
+                                    <th>VaccinStatusID</th>
+                                    <th>VaccinNameID</th>
+
+                                </tr>
+                                <tr th:each="t1 : ${negativeList}">
+                                    <td th:text="${t1.getName()}"></td>
+                                    <td th:text="${t1.getUserName()}"></td>
+                                    <td th:text="${t1.getPassword()}"></td>
+                                    <td th:text="${t1.getCpr()}"></td>
+                                    <td th:text="${t1.getPhone()}"></td>
+                                    <td th:text="${t1.getTcID()}"></td>
+                                    <td th:text="${t1.getVcID()}"></td>
+                                    <td th:text="${t1.getTsID()}"></td>
+                                    <td th:text="${t1.getVsID()}"></td>
+                                    <td th:text="${t1.getVacNameID()}"></td>
+                                    <td> <a th:href="@{/updateHome/{id}(id=${t1.userID})}" class="btn btn-primary"><button>Edit</button></a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <hr>
+
+                    </div>
+                </div>
             </div>
             <hr>
+            <h2> Search By cpr</h2>
+            <form  method="get" action="#" th:action="@{/searchByCpr}">
+                <label>Cpr</label><input type="number" name="cpr" placeholder="Enter CPR" required>
+                <input type="submit">
+            </form>
+            <hr>
+            <div id="cprDiv">
+                <div class="card">
+                    <div class="card-body">
+                        <div style="overflow-x:auto;">
+                            <table border="1" cellpadding="10">
+                                <br/><br/>
+                                <tr>
+                                    <th>Full name</th>
+                                    <th>User name</th>
+                                    <th>password</th>
+                                    <th>cpr</th>
+                                    <th>Phone</th>
+                                    <th>TestCenterID</th>
+                                    <th>VaccinCenterID</th>
+                                    <th>TestStatusID</th>
+                                    <th>VaccinStatusID</th>
+                                    <th>VaccinNameID</th>
 
+                                </tr>
+                                <tr th:each="t1 : ${searchListCpr}">
+                                    <td th:text="${t1.getName()}"></td>
+                                    <td th:text="${t1.getUserName()}"></td>
+                                    <td th:text="${t1.getPassword()}"></td>
+                                    <td th:text="${t1.getCpr()}"></td>
+                                    <td th:text="${t1.getPhone()}"></td>
+                                    <td th:text="${t1.getTcID()}"></td>
+                                    <td th:text="${t1.getVcID()}"></td>
+                                    <td th:text="${t1.getTsID()}"></td>
+                                    <td th:text="${t1.getVsID()}"></td>
+                                    <td th:text="${t1.getVacNameID()}"></td>
+                                    <td> <a th:href="@{/updateHome/{id}(id=${t1.userID})}" class="btn btn-primary"><button>Edit</button></a><label></label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <hr>
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<hr>
-<h2> Search by potive</h2>
-<form  method="get" action="#" th:action="@{/searchByPositive}">
-    <button type="submit">See all positive Status users</button>
-</form>
-<hr>
-<div id="positiveDiv">
-    <div class="card">
-        <div class="card-body">
-            <div>
-                <table border="1" cellpadding="10">
-                    <br/><br/>
-                    <tr>
-                        <th>Full name</th>
-                        <th>User name</th>
-                        <th>password</th>
-                        <th>cpr</th>
-                        <th>Phone</th>
-                        <th>TestCenterID</th>
-                        <th>VaccinCenterID</th>
-                        <th>TestStatusID</th>
-                        <th>VaccinStatusID</th>
-                        <th>VaccinNameID</th>
 
-                    </tr>
-                    <tr th:each="t1 : ${positiveList}">
-                        <td th:text="${t1.getName()}"></td>
-                        <td th:text="${t1.getUserName()}"></td>
-                        <td th:text="${t1.getPassword()}"></td>
-                        <td th:text="${t1.getCpr()}"></td>
-                        <td th:text="${t1.getPhone()}"></td>
-                        <td th:text="${t1.getTcID()}"></td>
-                        <td th:text="${t1.getVcID()}"></td>
-                        <td th:text="${t1.getTsID()}"></td>
-                        <td th:text="${t1.getVsID()}"></td>
-                        <td th:text="${t1.getVacNameID()}"></td>
-                        <td> <a th:href="@{/updateHome/{id}(id=${t1.userID})}" class="btn btn-primary"><button>Edit</button></a>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <hr>
 
-        </div>
-    </div>
-</div>
 
-<hr>
-<h2> Search by Negative</h2>
-<form  method="get" action="#" th:action="@{/searchByNegative}">
-    <button type="submit">See all Negative Status Users</button>
-</form>
-<hr>
-<div id="negativeDiv">
-    <div class="card">
-        <div class="card-body">
-            <div>
-                <table border="1" cellpadding="10">
-                    <br/><br/>
-                    <tr>
-                        <th>Full name</th>
-                        <th>User name</th>
-                        <th>password</th>
-                        <th>cpr</th>
-                        <th>Phone</th>
-                        <th>TestCenterID</th>
-                        <th>VaccinCenterID</th>
-                        <th>TestStatusID</th>
-                        <th>VaccinStatusID</th>
-                        <th>VaccinNameID</th>
 
-                    </tr>
-                    <tr th:each="t1 : ${negativeList}">
-                        <td th:text="${t1.getName()}"></td>
-                        <td th:text="${t1.getUserName()}"></td>
-                        <td th:text="${t1.getPassword()}"></td>
-                        <td th:text="${t1.getCpr()}"></td>
-                        <td th:text="${t1.getPhone()}"></td>
-                        <td th:text="${t1.getTcID()}"></td>
-                        <td th:text="${t1.getVcID()}"></td>
-                        <td th:text="${t1.getTsID()}"></td>
-                        <td th:text="${t1.getVsID()}"></td>
-                        <td th:text="${t1.getVacNameID()}"></td>
-                        <td> <a th:href="@{/updateHome/{id}(id=${t1.userID})}" class="btn btn-primary"><button>Edit</button></a>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <hr>
 
-        </div>
-    </div>
-</div>
-<hr>
-<h2> Search By cpr</h2>
-<form  method="get" action="#" th:action="@{/searchByCpr}">
-    <label>Cpr</label><input type="number" name="cpr" placeholder="Enter CPR" required>
-    <input type="submit">
-</form>
-<hr>
-<div id="cprDiv">
-    <div class="card">
-        <div class="card-body">
-            <div>
-                <table border="1" cellpadding="10">
-                    <br/><br/>
-                    <tr>
-                        <th>Full name</th>
-                        <th>User name</th>
-                        <th>password</th>
-                        <th>cpr</th>
-                        <th>Phone</th>
-                        <th>TestCenterID</th>
-                        <th>VaccinCenterID</th>
-                        <th>TestStatusID</th>
-                        <th>VaccinStatusID</th>
-                        <th>VaccinNameID</th>
 
-                    </tr>
-                    <tr th:each="t1 : ${searchListCpr}">
-                        <td th:text="${t1.getName()}"></td>
-                        <td th:text="${t1.getUserName()}"></td>
-                        <td th:text="${t1.getPassword()}"></td>
-                        <td th:text="${t1.getCpr()}"></td>
-                        <td th:text="${t1.getPhone()}"></td>
-                        <td th:text="${t1.getTcID()}"></td>
-                        <td th:text="${t1.getVcID()}"></td>
-                        <td th:text="${t1.getTsID()}"></td>
-                        <td th:text="${t1.getVsID()}"></td>
-                        <td th:text="${t1.getVacNameID()}"></td>
-                        <td> <a th:href="@{/updateHome/{id}(id=${t1.userID})}" class="btn btn-primary"><button>Edit</button></a><label></label>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <hr>
 
-        </div>
-    </div>
-</div>
+
+
+
+
+
+
+
+
+
+
 
 </body>
 </html>

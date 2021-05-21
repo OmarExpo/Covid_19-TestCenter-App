@@ -3,16 +3,7 @@
     <meta charset="UTF-8">
     <title>Home page</title>
     <div th:replace="fragments/fragment :: bootstrap"></div>
-    <style>
-        #div1{
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            -webkit-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
-            border: 1px solid black;
-        }
-    </style>
+    <div th:replace="fragments/fragment :: cssDash"></div>
 
 </head>
 <body style="background-color: darkcyan">
@@ -21,9 +12,10 @@
 <div th:replace="fragments/fragment :: mynavbar"></div>
 <hr>
 <div th:replace="fragments/fragment :: goBack"></div>
+<br>
+<hr>
 <div  id="div1">
-    <div class="row">
-        <div class="col-m-12">
+
             <div class="card">
                 <div class="card-body">
                     <hr>
@@ -31,13 +23,14 @@
                     <hr>
                     <h6  th:text="'Your appointment: ' + ${userAppointment}"></h6>
                     <hr>
-                    <h3 th:text="'      ' + ${haMessage}"></h3>
+                    <h3 th:text="' Message from test center:     ' + ${haMessage}"></h3>
+                    <hr>
+                    <h3 th:text="' Message from Vaccin Center:     ' + ${haMessage}"></h3>
 
                 </div>
             </div>
         </div>
-    </div>
-</div>
+
 
 </body>
 </html>
