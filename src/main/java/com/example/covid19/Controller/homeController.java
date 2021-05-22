@@ -33,6 +33,7 @@ public class homeController {
     User currentUser;
     String testStatus;
     String currentAppointment;
+    String userAppointment = "";
 
 
     @Autowired
@@ -89,13 +90,16 @@ public class homeController {
         List<TimeSlots> mytimeSlots = serviceInterface.fetchAllTimeSlots();
         List<TestCenter> myCenters = serviceInterface.fetchTestCenter();
         List<Appointment> allAppointments = serviceInterface.fetchAllAppointments();
-        String appointmentDetails="";
+       String appointmentDetails="";
+
+
         for(int i =0;i<allAppointments.size();i++){
             if(allAppointments.get(i).getCpr().equals(currentUser.getCpr())){
                 appointmentDetails = "You have an appointment on  " + allAppointments.get(i).getLocalDateTime().toString();
-
             }
         }
+
+
         model.addAttribute("allAppointments",allAppointments);
         model.addAttribute("appointmentDetails",appointmentDetails);
         model.addAttribute("timeSlots",mytimeSlots);
@@ -106,13 +110,8 @@ public class homeController {
     @GetMapping("/getCoronaPass")
     public String showCoronaPass(Model model) {
         List<User> userList = serviceInterface.fetchAllUser();
-        if (currentUser.getTsID() == 0) {
-            model.addAttribute("haMessage", "Message from health authorities: \nYou are not tested yet please make a test to get corona pass");
-            return "home/index";
-        } else if (currentUser.getTsID() == 1) {
-            model.addAttribute("haMessage", "Message from health authorities: \nYour status is positive please get isolated and contact your own doctor.");
-            return "home/index";
-        } else {
+        if (currentUser.getTsID() == 2) {
+
             Date today = new Date();
             Date afterTomorrow = new Date(System.currentTimeMillis() + 86400 * 1000 * 2);
             model.addAttribute("today", today);
@@ -121,6 +120,12 @@ public class homeController {
             model.addAttribute("myUser", currentUser);
             model.addAttribute("testStatus", testStatus);
             return "home/getCoronaPass";
+        } else if (currentUser.getTsID() == 1) {
+            model.addAttribute("haMessage", "Message from health authorities: \nYour status is positive please get isolated and contact your own doctor.");
+            return "home/index";
+        } else {
+            model.addAttribute("haMessage", "Message from health authorities: \nYou are not tested yet please make a test to get corona pass");
+            return "home/index";
         }
 
     }
@@ -137,7 +142,50 @@ public class homeController {
     }
     @GetMapping("/index")
     public String showIndex(Model model){
-       model.addAttribute("currentAppointment",currentAppointment);
+        List<Appointment> allAppointments = serviceInterface.fetchAllAppointments();
+        List<User> allUsers = serviceInterface.fetchAllUser();
+        String appointmentDetails="";
+        int  testStatusID=0;
+        int vaccinNameID=0;
+        String recentCpr = "";
+        String testCenterMessage = "";
+        String vaccinCenterMessage = "";
+
+        for(int i =0;i<allAppointments.size();i++){
+            if(allAppointments.get(i).getCpr().equals(currentUser.getCpr())){
+                appointmentDetails = "You have an appointment on  " + allAppointments.get(i).getLocalDateTime().toString();
+                recentCpr = currentUser.getCpr();
+            }
+        }
+        for(int i=0;i<allUsers.size();i++){
+            if(allUsers.get(i).getCpr().equals(recentCpr)){
+                testStatusID = allUsers.get(i).getTsID();
+                vaccinNameID = allUsers.get(i).getVacNameID();
+            }
+
+        }
+        switch (testStatusID){
+            case 0: testCenterMessage = "You are not yet tested or your test result is not ready";
+                break;
+            case 1 : testCenterMessage = "Your test status is positive.";
+                break;
+            default: testCenterMessage = "Your test status is negative ";
+                break;
+
+        }
+        switch (vaccinNameID){
+            case 0: vaccinCenterMessage = "You are not called for vaccination";
+                break;
+            case 1 : vaccinCenterMessage = "you are vaccinated 1st time";
+                break;
+            default: vaccinCenterMessage= "Your vaccination is completed";
+                break;
+
+        }
+        model.addAttribute("currentUser",currentUser.getUserName());
+        model.addAttribute("testCenterMessage",testCenterMessage);
+        model.addAttribute("vaccinCenterMessage",vaccinCenterMessage);
+       model.addAttribute("userAppointment",userAppointment);
         model.addAttribute("TestCenterName",TestCenterName);
         return "home/index";
     }
@@ -225,8 +273,7 @@ public class homeController {
     }
     @PostMapping("/testCenterName")
     public String testme(@ModelAttribute TestCenter testCenter, Model model) {
-
-       TestCenterName = testCenter.getCname();
+        TestCenterName = testCenter.getCname();
         System.out.println(TestCenterName);
        if(TestCenterName.equals("CPH-Center")){
            tcID =1;
@@ -248,20 +295,77 @@ public class homeController {
            tcID = 5;
            serviceInterface.updateTestCenterId(currentUser.getCpr(),tcID);
        }
-       String userAppointment = "";
+
+        List<User> allUsers = serviceInterface.fetchAllUser();
         List<Appointment> allAppointments = serviceInterface.fetchAllAppointments();
-       for(int i = 0;i<allAppointments.size();i++){
+        int  testStatusID=0;
+        int vaccinNameID=0;
+        String appointmentTestCenterName="";
+        int aTcID = 0;
+        String recentCpr = "";
+        String testCenterMessage = "";
+        String vaccinCenterMessage = "";
+        for(int i = 0;i<allAppointments.size();i++){
            if (allAppointments.get(i).getCpr().equals(currentUser.getCpr())){
-               userAppointment =  allAppointments.get(i).getLocalDateTime().toString();
+
+               aTcID = allAppointments.get(i).getTcID();
+               switch (aTcID){
+                   case 1: appointmentTestCenterName = "CPH-Center";
+                   break;
+                   case 2: appointmentTestCenterName ="CPH-North";
+                   break;
+                   case 3: appointmentTestCenterName = "CPH-South";
+                   break;
+                   case 4: appointmentTestCenterName = "CPH-East";
+                   break;
+                   case 5: appointmentTestCenterName = "CPH-West";
+                   break;
+                   default:appointmentTestCenterName ="not available please contact secretary office";
+                   break;
+
+               }
+
+
+
+               userAppointment =  allAppointments.get(i).getLocalDateTime().toString() +"Test center";
            }
        }
+
+        for(int i=0;i<allUsers.size();i++){
+            if(allUsers.get(i).getCpr().equals(recentCpr)){
+                testStatusID = allUsers.get(i).getTsID();
+                vaccinNameID = allUsers.get(i).getVacNameID();
+            }
+
+        }
+        switch (testStatusID){
+            case 0: testCenterMessage = "You are not yet tested or your test result is not ready";
+                break;
+            case 1 : testCenterMessage = "Your test status is positive.";
+                break;
+            default: testCenterMessage = "Your test status is negative ";
+                break;
+
+        }
+        switch (vaccinNameID){
+            case 0: vaccinCenterMessage = "You are not called for vaccination";
+                break;
+            case 1 : vaccinCenterMessage = "you are vaccinated 1st time";
+                break;
+            default: vaccinCenterMessage= "Your vaccination is completed";
+                break;
+
+        }
+        model.addAttribute("appointmentTestCenterName",appointmentTestCenterName);
+        model.addAttribute("testCenterMessage",testCenterMessage);
+        model.addAttribute("vaccinCenterMessage",vaccinCenterMessage);
         model.addAttribute("userAppointment",userAppointment);
        model.addAttribute("TestCenterName",TestCenterName);
        model.addAttribute("currentUser",currentUser.getUserName());
 
         return "home/index";
     }
-// changing code here
+
 @GetMapping("/takeDate")
 public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
 
@@ -321,13 +425,10 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
         String year = strDate.substring(6);
         String hour = timeM.substring(0, 2);
         String minute = timeM.substring(3);
-
         String receivedDate = year+"-"+month+"-"+day+" "+hour+":"+minute+":00";
-
         String str = (year +"-"+month+"-"+day+" "+hour+":"+minute);
         DateTimeFormatter dtf= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime dateTime = LocalDateTime.parse(str,dtf);
-
         List<Appointment> appList = serviceInterface.fetchAllAppointments();
         model.addAttribute("appList",appList);
         String cprError = "You have already an appointment on";
@@ -381,12 +482,15 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
         }
         return correct;
     }
+
+
     @GetMapping("/makeDirectAppointment")
     public String showDirectAppointment(Model model) {
         List<TimeSlots> mytimeSlots = serviceInterface.fetchAllTimeSlots();
         model.addAttribute("timeSlots",mytimeSlots);
         return "secretary/makeDirectAppointment";
     }
+
     @GetMapping("/delete/{id}")
     public String deleteMe(@PathVariable(value = "id") int id) {
         List<Appointment> appList = serviceInterface.fetchAllAppointments();
@@ -471,7 +575,7 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
         return "secretary/searchByName";
     }
 
-
+// write log(date,time and ip of the local device ) into log.txt file
     public void saveLogs(String myLogs) throws IOException {
        try {
            File file = new File("log.txt");

@@ -21,11 +21,11 @@
                     <hr>
                     <h6 style="color:#FF00FF" th:text=" 'User name:- ' + ${currentUser} + '  Your selected location is:-  ' + ${TestCenterName}"></h6>
                     <hr>
-                    <h6  th:text="'Your appointment: ' + ${userAppointment}"></h6>
+                    <h6  th:text="'Your appointment: ' + ${userAppointment}+'   Location: '+ ${appointmentTestCenterName}"></h6>
                     <hr>
-                    <h3 th:text="' Message from test center:     ' + ${haMessage}"></h3>
+                    <h3 th:text="' Message from test center:     ' + ${testCenterMessage}"></h3>
                     <hr>
-                    <h3 th:text="' Message from Vaccin Center:     ' + ${haMessage}"></h3>
+                    <h3 th:text="' Message from Vaccin Center:     ' + ${vaccinCenterMessage}"></h3>
 
                 </div>
             </div>
