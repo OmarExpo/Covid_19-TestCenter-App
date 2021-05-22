@@ -204,9 +204,6 @@ public class homeController {
                return"home/signup";
            }
 
-
-
-
            if(user.getCpr().length()!=10){
                error = "please provide valid cpr number without '-' 0101804949 (not valid -->010180-4949)";
                model.addAttribute("error",error) ;
@@ -392,7 +389,19 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
     }
     @GetMapping("/delete/{id}")
     public String deleteMe(@PathVariable(value = "id") int id) {
+        List<Appointment> appList = serviceInterface.fetchAllAppointments();
+        User user = serviceInterface.fetchSingleUser(id);
+        long cprA = Long.parseLong(user.getCpr());
+
+        for(int i=0;i<appList.size();i++){
+
+            if(appList.get(i).getCpr().equals(user.getCpr())){
+
+                serviceInterface.deleteAppointment(cprA);
+            }
+        }
         serviceInterface.deleteUser(id);
+
         return ("redirect:/deleteUser");
     }
 

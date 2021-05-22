@@ -4,7 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-public class DateAndTime {
+public class DateAndTime extends LoginCheck {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date mydate;
     private String time;
