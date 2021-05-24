@@ -29,5 +29,11 @@ public interface RepoInterface {
     public void updateTestStatusDate(String cpr, Date testStatusDate);
     public void updateVaccinStatusDate(String cpr,Date vaccinStatusDate);
     public List<TestStatusDate> fetchAllTestStatusDate();
+    public List<Imessage> fetchAllImessage();
+    public void addImessage(String cpr,String messageI);
+    public boolean deleteMessage(String cpr);
+    public List<Vmessage> fetchAllVmessage();
+    public void addVmessage(String cpr,String messageV);
+    public boolean deleteVmessage(String cpr);
 
 }

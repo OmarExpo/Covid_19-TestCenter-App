@@ -23,9 +23,11 @@
                     <hr>
                     <h6  th:text="'Your appointment: ' + ${userAppointment}+'   Location: '+ ${appointmentTestCenterName}"></h6>
                     <hr>
-                    <h3 th:text="' Message from test center:     ' + ${testCenterMessage}"></h3>
+                    <h6 th:text="' your test status:     ' + ${testCenterMessage}"></h6>
                     <hr>
-                    <h3 th:text="' Message from Vaccin Center:     ' + ${vaccinCenterMessage}"></h3>
+                    <h6 th:text="' Infection detection center:     ' + ${idcMessage}"></h6>
+                    <hr>
+                    <h6 th:text="' Message from Vaccin Center:     ' + ${vaccinCenterMessage}"></h6>
 
                 </div>
             </div>

@@ -125,6 +125,36 @@ public class ServiceImple implements ServiceInterface {
         return repoInterface.fetchAllTestStatusDate();
     }
 
+    @Override
+    public List<Imessage> fetchAllImessage() {
+        return repoInterface.fetchAllImessage();
+    }
+
+    @Override
+    public void addImessage(String cpr, String messageI) {
+       repoInterface.addImessage(cpr,messageI);
+    }
+
+    @Override
+    public boolean deleteMessage(String cpr) {
+        return repoInterface.deleteMessage(cpr);
+    }
+
+    @Override
+    public List<Vmessage> fetchAllVmessage() {
+        return repoInterface.fetchAllVmessage();
+    }
+
+    @Override
+    public void addVmessage(String cpr, String messageV) {
+repoInterface.addVmessage(cpr,messageV);
+    }
+
+    @Override
+    public boolean deleteVmessage(String cpr) {
+        return repoInterface.deleteVmessage(cpr);
+    }
+
 
     @Override
     public List<User> fetchAllNegative() {

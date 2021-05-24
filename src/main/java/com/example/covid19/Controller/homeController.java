@@ -31,44 +31,44 @@ import java.util.Map;
 public class homeController {
     String TestCenterName;
     String UserName;
-    int tcID=0;
-    String cpr1="598358948935";
+    int tcID = 0;
+    String cpr1 = "598358948935";
     User currentUser;
     String testStatus;
     String currentAppointment;
     String userAppointment = "";
-    Map<String,Date> vaccinStatusChanged = new HashMap<String,Date>();
-    Map<String,Date> testStatusChanged = new HashMap<String,Date>();
-    int recentTestStatusID=0;
-    int recentVaccinStatusID =0;
+    Map<String, Date> vaccinStatusChanged = new HashMap<String, Date>();
+    Map<String, Date> testStatusChanged = new HashMap<String, Date>();
+    int recentTestStatusID = 0;
+    int recentVaccinStatusID = 0;
     Date testStatusDate;
     Date vaccinStatusDate;
-    int currentTcID=0;
-    String currentTestCenterName="";
-    String appointmentTestCenterName="";
+    int currentTcID = 0;
+    String currentTestCenterName = "";
+    String appointmentTestCenterName = "";
 
 
     @Autowired
     ServiceInterface serviceInterface;
 
     @GetMapping("/")
-    public String showDashboard() throws IOException{
+    public String showDashboard() throws IOException {
 
         List<Appointment> allAppointments = serviceInterface.fetchAllAppointments();
         Date myDate = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String strDate = formatter.format(myDate);
-        String month = strDate.substring(3,5);
+        String month = strDate.substring(3, 5);
         String day = strDate.substring(0, 2);
 
-        saveLogs(myDate.toString() +"\n"+getIpAddress());
+        saveLogs(myDate.toString() + "\n" + getIpAddress());
 
-        for(int i=0;i<allAppointments.size();i++) {
+        for (int i = 0; i < allAppointments.size(); i++) {
             String day1 = allAppointments.get(i).getLocalDateTime().toString().substring(8, 10);
             String month1 = allAppointments.get(i).getLocalDateTime().toString().substring(5, 7);
 
 
-            if ((Integer.parseInt(day1) < Integer.parseInt(day)) && (Integer.parseInt(month) <= Integer.parseInt(month1))){
+            if ((Integer.parseInt(day1) < Integer.parseInt(day)) && (Integer.parseInt(month) <= Integer.parseInt(month1))) {
                 long cpr = Long.parseLong(allAppointments.get(i).getCpr());
                 serviceInterface.deleteAppointment(cpr);
 
@@ -80,45 +80,46 @@ public class homeController {
     }
 
     @GetMapping("/userByrole")
-    public String showUserByrole(){
+    public String showUserByrole() {
         return "home/userByrole";
     }
 
     @GetMapping("/chooseTestCenter")
-    public String showChooseTestCenter(){
+    public String showChooseTestCenter() {
         return "home/chooseTestCenter";
     }
 
     @GetMapping("/makeAppointment")
-    public String showMakeAppointment(Model model){
+    public String showMakeAppointment(Model model) {
         List<TimeSlots> mytimeSlots = serviceInterface.fetchAllTimeSlots();
         List<TestCenter> myCenters = serviceInterface.fetchTestCenter();
         List<Appointment> allAppointments = serviceInterface.fetchAllAppointments();
-       String appointmentDetails="";
+        String appointmentDetails = "";
 
 
-        for(int i =0;i<allAppointments.size();i++){
-            if(allAppointments.get(i).getCpr().equals(currentUser.getCpr())){
+        for (int i = 0; i < allAppointments.size(); i++) {
+            if (allAppointments.get(i).getCpr().equals(currentUser.getCpr())) {
                 appointmentDetails = "You have an appointment on  " + allAppointments.get(i).getLocalDateTime().toString();
             }
         }
 
-        model.addAttribute("appointmentTestCenterName",appointmentTestCenterName);
-        model.addAttribute("allAppointments",allAppointments);
-        model.addAttribute("appointmentDetails",appointmentDetails);
-        model.addAttribute("timeSlots",mytimeSlots);
-        model.addAttribute("myCenters",myCenters);
-        model.addAttribute("mytestcenter",TestCenterName);
+        model.addAttribute("appointmentTestCenterName", appointmentTestCenterName);
+        model.addAttribute("allAppointments", allAppointments);
+        model.addAttribute("appointmentDetails", appointmentDetails);
+        model.addAttribute("timeSlots", mytimeSlots);
+        model.addAttribute("myCenters", myCenters);
+        model.addAttribute("mytestcenter", TestCenterName);
         return "home/makeAppointment";
     }
+
     @GetMapping("/getCoronaPass")
     public String showCoronaPass(Model model) {
-        Date currentDate=null;
+        Date currentDate = null;
         List<User> userList = serviceInterface.fetchAllUser();
         List<TestStatusDate> testStatusDates = serviceInterface.fetchAllTestStatusDate();
-        for(int i=0;i<testStatusDates.size();i++){
-            if (currentUser.getCpr().equals(testStatusDates.get(i).getCpr())){
-                currentDate=testStatusDates.get(i).getTestStatusDate();
+        for (int i = 0; i < testStatusDates.size(); i++) {
+            if (currentUser.getCpr().equals(testStatusDates.get(i).getCpr())) {
+                currentDate = testStatusDates.get(i).getTestStatusDate();
             }
         }
 
@@ -127,7 +128,7 @@ public class homeController {
 
             Date today = currentDate;
 
-          Long milsec = today.getTime();
+            Long milsec = today.getTime();
 
             Date afterTomorrow = new Date(milsec + 86400 * 1000 * 2);
             model.addAttribute("today", currentDate);
@@ -147,68 +148,77 @@ public class homeController {
     }
 
 
-
     @GetMapping("/signUp")
-    public String showSignUp(){
+    public String showSignUp() {
         return "home/signUp";
     }
+
     @GetMapping("/gdpr")
-    public String showGdpr(){
+    public String showGdpr() {
         return "home/gdpr";
     }
+
     @GetMapping("/index")
-    public String showIndex(Model model){
+    public String showIndex(Model model) {
         List<Appointment> allAppointments = serviceInterface.fetchAllAppointments();
         List<User> allUsers = serviceInterface.fetchAllUser();
-        String appointmentDetails="";
-        int  testStatusID=0;
-        int vaccinNameID=0;
+        String appointmentDetails = "";
+        int testStatusID = 0;
+        int vaccinNameID = 0;
         String recentCpr = "";
         String testCenterMessage = "";
         String vaccinCenterMessage = "";
 
-        for(int i =0;i<allAppointments.size();i++){
-            if(allAppointments.get(i).getCpr().equals(currentUser.getCpr())){
+        for (int i = 0; i < allAppointments.size(); i++) {
+            if (allAppointments.get(i).getCpr().equals(currentUser.getCpr())) {
                 appointmentDetails = "You have an appointment on  " + allAppointments.get(i).getLocalDateTime().toString();
                 recentCpr = currentUser.getCpr();
             }
         }
-        for(int i=0;i<allUsers.size();i++){
-            if(allUsers.get(i).getCpr().equals(recentCpr)){
+        for (int i = 0; i < allUsers.size(); i++) {
+            if (allUsers.get(i).getCpr().equals(recentCpr)) {
                 testStatusID = allUsers.get(i).getTsID();
                 vaccinNameID = allUsers.get(i).getVacNameID();
             }
 
         }
-        switch (testStatusID){
-            case 0: testCenterMessage = "You are not yet tested or your test result is not ready";
+        switch (testStatusID) {
+            case 0:
+                testCenterMessage = "You are not yet tested or your test result is not ready";
                 break;
-            case 1 : testCenterMessage = "Your test status is positive.";
+            case 1:
+                testCenterMessage = "Your test status is positive.";
                 break;
-            default: testCenterMessage = "Your test status is negative ";
-                break;
-
-        }
-        switch (vaccinNameID){
-            case 0: vaccinCenterMessage = "You are not called for vaccination";
-                break;
-            case 1 : vaccinCenterMessage = "you are vaccinated 1st time";
-                break;
-            default: vaccinCenterMessage= "Your vaccination is completed";
+            default:
+                testCenterMessage = "Your test status is negative ";
                 break;
 
         }
-        model.addAttribute("currentUser",currentUser.getUserName());
-        model.addAttribute("testCenterMessage",testCenterMessage);
-        model.addAttribute("vaccinCenterMessage",vaccinCenterMessage);
-       model.addAttribute("userAppointment",userAppointment);
-        model.addAttribute("TestCenterName",TestCenterName);
+        switch (vaccinNameID) {
+            case 0:
+                vaccinCenterMessage = "You are not called for vaccination";
+                break;
+            case 1:
+                vaccinCenterMessage = "you are vaccinated 1st time";
+                break;
+            default:
+                vaccinCenterMessage = "Your vaccination is completed";
+                break;
+
+        }
+        model.addAttribute("currentUser", currentUser.getUserName());
+        model.addAttribute("testCenterMessage", testCenterMessage);
+        model.addAttribute("vaccinCenterMessage", vaccinCenterMessage);
+        model.addAttribute("userAppointment", userAppointment);
+        model.addAttribute("TestCenterName", TestCenterName);
         return "home/index";
     }
+
     @GetMapping("/login")
-    public String showlogin(){
+    public String showlogin() {
         return "home/login";
     }
+
     @PostMapping("/user")
     public ModelAndView login(@ModelAttribute LoginCheck loginCheck, Model model) {
 
@@ -225,18 +235,25 @@ public class homeController {
             ModelAndView modelAndView = new ModelAndView("infectionCenter/secretaryIdash");
 
             return modelAndView;
-        }
-
-        else if (logIncheck1(loginCheck.getUserName(), (loginCheck.getPassword()))) {
+        } else if (logIncheck1(loginCheck.getUserName(), (loginCheck.getPassword()))) {
             System.out.println(logIncheck1(loginCheck.getUserName(), (loginCheck.getPassword())));
             ModelAndView modelAndView = new ModelAndView("home/chooseTestCenter");
             UserName = loginCheck.getUserName();
             String vennueName = TestCenterName;
-            //this.repoInterface.updateTestCenterId(cpr1,tcID);
 
-           model.addAttribute("UserName",UserName);
-           model.addAttribute("vennueName",vennueName);
-           model.addAttribute("currentAppointment",currentAppointment);
+
+            model.addAttribute("UserName", UserName);
+            model.addAttribute("vennueName", vennueName);
+            model.addAttribute("currentAppointment", currentAppointment);
+            return modelAndView;
+        } else if ((loginCheck.getUserName().equals("adminI")) && (loginCheck.getPassword().equals("ai123"))) {
+            ModelAndView modelAndView = new ModelAndView("infectionCenter/secretaryIdash");
+            return modelAndView;
+        } else if ((loginCheck.getUserName().equals("secretaryV")) && (loginCheck.getPassword().equals("sv123"))) {
+            ModelAndView modelAndView = new ModelAndView("vaccinCenter/secretaryVdash");
+            return modelAndView;
+        } else if ((loginCheck.getUserName().equals("adminV")) && (loginCheck.getPassword().equals("av123"))) {
+            ModelAndView modelAndView = new ModelAndView("vaccinCenter/secretaryVdash");
             return modelAndView;
         } else {
             ModelAndView modelAndView1 = new ModelAndView("home/dashboard");
@@ -246,197 +263,182 @@ public class homeController {
     }
 
     @PostMapping("/createList")
-    public String create(@ModelAttribute User user,Model model) {
+    public String create(@ModelAttribute User user, Model model) {
         String error = "";
 
-       List<User> userList =serviceInterface.fetchAllUser();
-       for(int i=0;i<userList.size();i++){
-           if(userList.get(i).getCpr().equals(user.getCpr())){
-               error = "This cpr is already in use, please veryfi cpr number if it is correct you have already signedUp kindly go to login page.";
-              model.addAttribute("error",error) ;
-              return"home/signup";
-           }
+        List<User> userList = serviceInterface.fetchAllUser();
+        for (int i = 0; i < userList.size(); i++) {
+            if (userList.get(i).getCpr().equals(user.getCpr())) {
+                error = "This cpr is already in use, please veryfi cpr number if it is correct you have already signedUp kindly go to login page.";
+                model.addAttribute("error", error);
+                return "home/signup";
+            }
 
-           if(userList.get(i).getName().equals(user.getName())){
-               error = "This name is already in use, please add any charecter after your name";
-               model.addAttribute("error",error) ;
-               return"home/signup";
-           }
-           if(userList.get(i).getPassword().equals(user.getPassword())){
-               error = "This password  is not approved by our system, please provide diffrent password";
-               model.addAttribute("error",error) ;
-               return"home/signup";
-           }
-
-           if(user.getCpr().length()!=10){
-               error = "please provide valid cpr number without '-' 0101804949 (not valid -->010180-4949)";
-               model.addAttribute("error",error) ;
-               return"home/signup";
-           }
-           if(userList.get(i).getUserName().equals((user.getUserName()))){
-               error = "This username is  already taken by someone else, please enter different username";
-               model.addAttribute("error",error) ;
-               return"home/signup";
-           }
-           if(user.getUserName().length()> 30){
-               error ="you have choosen a very long name please give a shorter name arround 30 character";
-           }
-       }
-
+            if (userList.get(i).getName().equals(user.getName())) {
+                error = "This name is already in use, please add any charecter after your name";
+                model.addAttribute("error", error);
+                return "home/signup";
+            }
+            if (userList.get(i).getPassword().equals(user.getPassword())) {
+                error = "This password  is not approved by our system, please provide diffrent password";
+                model.addAttribute("error", error);
+                return "home/signup";
+            }
+            if (user.getCpr().length() != 10) {
+                error = "please provide valid cpr number without '-' 0101804949 (not valid -->010180-4949)";
+                model.addAttribute("error", error);
+                return "home/signup";
+            }
+            if (userList.get(i).getUserName().equals((user.getUserName()))) {
+                error = "This username is  already taken by someone else, please enter different username";
+                model.addAttribute("error", error);
+                return "home/signup";
+            }
+            if (user.getUserName().length() > 30) {
+                error = "you have choosen a very long name please give a shorter name arround 30 character";
+            }
+        }
         this.serviceInterface.addUser(user);
-       Date date = new Date();
-       this.serviceInterface.addDates(user.getCpr(),user.getTsID(),date,user.getVsID(),date);
+        Date date = new Date();
+        this.serviceInterface.addDates(user.getCpr(), user.getTsID(), date, user.getVsID(), date);
 
         return "home/login";
     }
+
     @PostMapping("/testCenterName")
     public String testme(@ModelAttribute TestCenter testCenter, Model model) {
         TestCenterName = testCenter.getCname();
 
-       if(TestCenterName.equals("CPH-Center")){
-           tcID =1;
-           serviceInterface.updateTestCenterId(currentUser.getCpr(),tcID);
-       }
-        else if(TestCenterName.equals("CPH-North")){
-            tcID =2;
-           serviceInterface.updateTestCenterId(currentUser.getCpr(),tcID);
+        if (TestCenterName.equals("CPH-Center")) {
+            tcID = 1;
+            serviceInterface.updateTestCenterId(currentUser.getCpr(), tcID);
+        } else if (TestCenterName.equals("CPH-North")) {
+            tcID = 2;
+            serviceInterface.updateTestCenterId(currentUser.getCpr(), tcID);
+        } else if (TestCenterName.equals("CPH-South")) {
+            tcID = 3;
+            serviceInterface.updateTestCenterId(currentUser.getCpr(), tcID);
+        } else if (TestCenterName.equals("CPH-East")) {
+            tcID = 4;
+            serviceInterface.updateTestCenterId(currentUser.getCpr(), tcID);
+        } else {
+            tcID = 5;
+            serviceInterface.updateTestCenterId(currentUser.getCpr(), tcID);
         }
-       else if(TestCenterName.equals("CPH-South")){
-           tcID =3;
-           serviceInterface.updateTestCenterId(currentUser.getCpr(),tcID);
-       }
-       else if(TestCenterName.equals("CPH-East")){
-           tcID =4;
-           serviceInterface.updateTestCenterId(currentUser.getCpr(),tcID);
-       }
-       else{
-           tcID = 5;
-           serviceInterface.updateTestCenterId(currentUser.getCpr(),tcID);
-       }
 
         List<User> allUsers = serviceInterface.fetchAllUser();
         List<Appointment> allAppointments = serviceInterface.fetchAllAppointments();
-        int  testStatusID=0;
-        int vaccinNameID=0;
+        List<Imessage> imessages = serviceInterface.fetchAllImessage();
+        List<Vmessage> vmessages = serviceInterface.fetchAllVmessage();
+
+        int testStatusID = 0;
+        int vaccinNameID = 0;
 
         int aTcID = 0;
         String recentCpr = "";
         String testCenterMessage = "";
         String vaccinCenterMessage = "";
-        for(int i = 0;i<allAppointments.size();i++){
-           if (allAppointments.get(i).getCpr().equals(currentUser.getCpr())){
+        String idcMessage = "";
+        String vMessage="";
+        for (int i = 0; i < allAppointments.size(); i++) {
+            if (allAppointments.get(i).getCpr().equals(currentUser.getCpr())) {
 
-               aTcID = allAppointments.get(i).getTcID();
-               switch (aTcID){
-                   case 1: appointmentTestCenterName = "CPH-Center";
-                   break;
-                   case 2: appointmentTestCenterName ="CPH-North";
-                   break;
-                   case 3: appointmentTestCenterName = "CPH-South";
-                   break;
-                   case 4: appointmentTestCenterName = "CPH-East";
-                   break;
-                   case 5: appointmentTestCenterName = "CPH-West";
-                   break;
-                   default:appointmentTestCenterName ="not available please contact secretary office";
-                   break;
+                aTcID = allAppointments.get(i).getTcID();
+                switch (aTcID) {
+                    case 1:
+                        appointmentTestCenterName = "CPH-Center";
+                        break;
+                    case 2:
+                        appointmentTestCenterName = "CPH-North";
+                        break;
+                    case 3:
+                        appointmentTestCenterName = "CPH-South";
+                        break;
+                    case 4:
+                        appointmentTestCenterName = "CPH-East";
+                        break;
+                    case 5:
+                        appointmentTestCenterName = "CPH-West";
+                        break;
+                    default:
+                        appointmentTestCenterName = "not available please contact secretary office";
+                        break;
+                }
 
-               }
+                userAppointment = allAppointments.get(i).getLocalDateTime().toString() + "Test center";
+            }
+        }
 
-
-
-               userAppointment =  allAppointments.get(i).getLocalDateTime().toString() +"Test center";
-           }
-       }
-
-        for(int i=0;i<allUsers.size();i++){
-            if(allUsers.get(i).getCpr().equals(recentCpr)){
+        for (int i = 0; i < allUsers.size(); i++) {
+            if (allUsers.get(i).getCpr().equals(recentCpr)) {
                 testStatusID = allUsers.get(i).getTsID();
                 vaccinNameID = allUsers.get(i).getVacNameID();
             }
 
         }
-        switch (testStatusID){
-            case 0: testCenterMessage = "You are not yet tested or your test result is not ready";
+        switch (testStatusID) {
+            case 0:
+                testCenterMessage = "You are not yet tested or your test result is not ready";
                 break;
-            case 1 : testCenterMessage = "Your test status is positive.";
+            case 1:
+                testCenterMessage = "Your test status is positive.";
                 break;
-            default: testCenterMessage = "Your test status is negative ";
-                break;
-
-        }
-        switch (vaccinNameID){
-            case 0: vaccinCenterMessage = "You are not called for vaccination";
-                break;
-            case 1 : vaccinCenterMessage = "you are vaccinated 1st time";
-                break;
-            default: vaccinCenterMessage= "Your vaccination is completed";
+            default:
+                testCenterMessage = "Your test status is negative ";
                 break;
 
         }
-        model.addAttribute("appointmentTestCenterName",appointmentTestCenterName);
-        model.addAttribute("testCenterMessage",testCenterMessage);
-        model.addAttribute("vaccinCenterMessage",vaccinCenterMessage);
-        model.addAttribute("userAppointment",userAppointment);
-       model.addAttribute("TestCenterName",TestCenterName);
-       model.addAttribute("currentTestCenterName",currentTestCenterName);
-       model.addAttribute("currentUser",currentUser.getUserName());
+        switch (vaccinNameID) {
+            case 0:
+                vaccinCenterMessage = "You are not called for vaccination";
+                break;
+            case 1:
+                vaccinCenterMessage = "you are vaccinated 1st time";
+                break;
+            default:
+                vaccinCenterMessage = "Your vaccination is completed";
+                break;
+
+        }
+        for (Imessage ims : imessages) {
+            if (ims.getCpr().equals(cpr1)) {
+                idcMessage = ims.getMessageI();
+
+                break;
+            } else {
+                continue;
+            }
+        }
+        for (Vmessage vms : vmessages) {
+            if (vms.getCpr().equals(cpr1)) {
+                vMessage = vms.getMessageV();
+
+                break;
+            } else {
+                continue;
+            }
+        }
+
+        model.addAttribute("appointmentTestCenterName", appointmentTestCenterName);
+        model.addAttribute("testCenterMessage", testCenterMessage);
+        model.addAttribute("vaccinCenterMessage", vMessage);
+        model.addAttribute("userAppointment", userAppointment);
+        model.addAttribute("TestCenterName", TestCenterName);
+        model.addAttribute("currentTestCenterName", currentTestCenterName);
+        model.addAttribute("currentUser", currentUser.getUserName());
+        model.addAttribute("idcMessage", idcMessage);
 
         return "home/index";
     }
 
-@GetMapping("/takeDate")
-public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
-
-    String cpr = dt.getCpr();
-    Date dateM = dt.getMydate();
-    String timeM = dt.getTime();
-    model.addAttribute("dateM",dateM);
-    model.addAttribute("timeM",timeM);
-    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-    String strDate = formatter.format(dateM);
-    String day = strDate.substring(0, 2);
-    String month = strDate.substring(3, 5);
-    String year = strDate.substring(6);
-    String hour = timeM.substring(0, 2);
-    String minute = timeM.substring(3);
-    String receivedDate = year+"-"+month+"-"+day+" "+hour+":"+minute+":00";
-    String str = (year +"-"+month+"-"+day+" "+hour+":"+minute);
-    DateTimeFormatter dtf=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    LocalDateTime dateTime = LocalDateTime.parse(str,dtf);
-
-    List<Appointment> appList = serviceInterface.fetchAllAppointments();
-    model.addAttribute("appList",appList);
-    String cprError = "You have already an appointment on";
-    String timeMatch = "This time has already been taken by someone else please take another time. ";
-
-    for (int i = 0; i < appList.size(); i++) {
-        if (appList.get(i).getCpr().equals(cpr1)) {
-            model.addAttribute("cprError", cprError);
-            currentAppointment = " "+appList.get(i).getLocalDateTime().toString()+" ";
-            model.addAttribute("bookedAppointment",currentAppointment);
-            model.addAttribute("appointmentTestCenterName",appointmentTestCenterName);
-            return "home/makeAppointment";
-
-        } else if (appList.get(i).getLocalDateTime().toString().equals(receivedDate) && appList.get(i).getTcID()== tcID) {
-            model.addAttribute("timeMatch", timeMatch);
-            return "home/makeAppointment";
-        } else {
-            continue;
-        } }
-
-    serviceInterface.addAppointment(cpr1,tcID,dateTime);
-    return "home/makeAppointment";
-}
-    @GetMapping("/DirectAppointment")
-    public String makeDirectAppointment(@ModelAttribute DateAndTime dt, Model model) {
+    @GetMapping("/takeDate")
+    public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
 
         String cpr = dt.getCpr();
         Date dateM = dt.getMydate();
         String timeM = dt.getTime();
-        int tcID = dt.getTcID();
-        model.addAttribute("dateM",dateM);
-        model.addAttribute("timeM",timeM);
+        model.addAttribute("dateM", dateM);
+        model.addAttribute("timeM", timeM);
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String strDate = formatter.format(dateM);
         String day = strDate.substring(0, 2);
@@ -444,12 +446,58 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
         String year = strDate.substring(6);
         String hour = timeM.substring(0, 2);
         String minute = timeM.substring(3);
-        String receivedDate = year+"-"+month+"-"+day+" "+hour+":"+minute+":00";
-        String str = (year +"-"+month+"-"+day+" "+hour+":"+minute);
-        DateTimeFormatter dtf= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime dateTime = LocalDateTime.parse(str,dtf);
+        String receivedDate = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":00";
+        String str = (year + "-" + month + "-" + day + " " + hour + ":" + minute);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dateTime = LocalDateTime.parse(str, dtf);
+
         List<Appointment> appList = serviceInterface.fetchAllAppointments();
-        model.addAttribute("appList",appList);
+        model.addAttribute("appList", appList);
+        String cprError = "You have already an appointment on";
+        String timeMatch = "This time has already been taken by someone else please take another time. ";
+
+        for (int i = 0; i < appList.size(); i++) {
+            if (appList.get(i).getCpr().equals(cpr1)) {
+                model.addAttribute("cprError", cprError);
+                currentAppointment = " " + appList.get(i).getLocalDateTime().toString() + " ";
+                model.addAttribute("bookedAppointment", currentAppointment);
+                model.addAttribute("appointmentTestCenterName", appointmentTestCenterName);
+                return "home/makeAppointment";
+
+            } else if (appList.get(i).getLocalDateTime().toString().equals(receivedDate) && appList.get(i).getTcID() == tcID) {
+                model.addAttribute("timeMatch", timeMatch);
+                return "home/makeAppointment";
+            } else {
+                continue;
+            }
+        }
+
+        serviceInterface.addAppointment(cpr1, tcID, dateTime);
+        return "home/makeAppointment";
+    }
+
+    @GetMapping("/DirectAppointment")
+    public String makeDirectAppointment(@ModelAttribute DateAndTime dt, Model model) {
+
+        String cpr = dt.getCpr();
+        Date dateM = dt.getMydate();
+        String timeM = dt.getTime();
+        int tcID = dt.getTcID();
+        model.addAttribute("dateM", dateM);
+        model.addAttribute("timeM", timeM);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String strDate = formatter.format(dateM);
+        String day = strDate.substring(0, 2);
+        String month = strDate.substring(3, 5);
+        String year = strDate.substring(6);
+        String hour = timeM.substring(0, 2);
+        String minute = timeM.substring(3);
+        String receivedDate = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":00";
+        String str = (year + "-" + month + "-" + day + " " + hour + ":" + minute);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dateTime = LocalDateTime.parse(str, dtf);
+        List<Appointment> appList = serviceInterface.fetchAllAppointments();
+        model.addAttribute("appList", appList);
         String cprError = "You have already an appointment on";
         String timeMatch = "This time has already been taken by someone else please take another time. ";
 
@@ -458,17 +506,18 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
                 model.addAttribute("cprError", cprError);
                 currentAppointment = appList.get(i).getLocalDateTime().toString();
                 //currentAppointment = appList.get(i).getDay()+"-"+appList.get(i).getMonth()+"-"+appList.get(i).getYear()+" at "+appList.get(i).getHour()+":"+ appList.get(i).getMinute();
-                model.addAttribute("bookedAppointment",currentAppointment);
+                model.addAttribute("bookedAppointment", currentAppointment);
                 return "secretary/makeDirectAppointment";
 
-            } else if (appList.get(i).getLocalDateTime().toString().equals(receivedDate) && appList.get(i).getTcID()== tcID) {
+            } else if (appList.get(i).getLocalDateTime().toString().equals(receivedDate) && appList.get(i).getTcID() == tcID) {
                 model.addAttribute("timeMatch", timeMatch);
                 return "secretary/makeDirectAppointment";
             } else {
                 continue;
-            } }
+            }
+        }
 
-        serviceInterface.addAppointment(cpr,tcID,dateTime);
+        serviceInterface.addAppointment(cpr, tcID, dateTime);
         return "secretary/secretaryDash";
     }
 
@@ -480,13 +529,13 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
                 correct = true;
                 cpr1 = userList.get(i).getCpr();
                 currentUser = userList.get(i);
-                if(currentUser.getTsID()==0){
+                if (currentUser.getTsID() == 0) {
                     testStatus = "Not tested";
                 }
-                if(currentUser.getTsID()==1){
+                if (currentUser.getTsID() == 1) {
                     testStatus = "Positive";
                 }
-                if(currentUser.getTsID()==2){
+                if (currentUser.getTsID() == 2) {
                     testStatus = "Negative";
                 }
 
@@ -502,7 +551,7 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
     @GetMapping("/makeDirectAppointment")
     public String showDirectAppointment(Model model) {
         List<TimeSlots> mytimeSlots = serviceInterface.fetchAllTimeSlots();
-        model.addAttribute("timeSlots",mytimeSlots);
+        model.addAttribute("timeSlots", mytimeSlots);
         return "secretary/makeDirectAppointment";
     }
 
@@ -512,9 +561,9 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
         User user = serviceInterface.fetchSingleUser(id);
         long cprA = Long.parseLong(user.getCpr());
 
-        for(int i=0;i<appList.size();i++){
+        for (int i = 0; i < appList.size(); i++) {
 
-            if(appList.get(i).getCpr().equals(user.getCpr())){
+            if (appList.get(i).getCpr().equals(user.getCpr())) {
 
                 serviceInterface.deleteAppointment(cprA);
             }
@@ -528,14 +577,14 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
     @GetMapping("/deleteUser")
     public String showDeleteUser(Model model) {
         List<User> userList = serviceInterface.fetchAllUser();
-        model.addAttribute("userList",userList);
+        model.addAttribute("userList", userList);
         return "administrator/deleteUser";
     }
 
     @GetMapping("/UpdateUserHome")
     public String showUserUpdateHome(Model model) {
         List<User> userList = serviceInterface.fetchAllUser();
-        model.addAttribute("userList",userList);
+        model.addAttribute("userList", userList);
         return "secretary/UpdateUserHome";
     }
 
@@ -543,25 +592,22 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
     @GetMapping("/updateHome/{id}")
     public String showFormForUpdate(@PathVariable(value = "id") int id, Model md) {
         User user = serviceInterface.fetchSingleUser(id);
-        recentTestStatusID= user.getTsID();
+        recentTestStatusID = user.getTsID();
         recentVaccinStatusID = user.getVsID();
         md.addAttribute("user", user);
         return "secretary/userUpdatePage";
     }
 
 
-
-
-
     @PostMapping("/updateHome")
     public String saveEmployee(@ModelAttribute("user") User user) {
-        if(user.getTsID()!= recentTestStatusID){
-            testStatusDate=new Date();
-            this.serviceInterface.updateTestStatusDate(user.getCpr(),testStatusDate);
+        if (user.getTsID() != recentTestStatusID) {
+            testStatusDate = new Date();
+            this.serviceInterface.updateTestStatusDate(user.getCpr(), testStatusDate);
         }
-        if(user.getVsID()!= recentVaccinStatusID){
-            vaccinStatusDate=new Date();
-            this.serviceInterface.updateVaccinStatusDate(user.getCpr(),vaccinStatusDate);
+        if (user.getVsID() != recentVaccinStatusID) {
+            vaccinStatusDate = new Date();
+            this.serviceInterface.updateVaccinStatusDate(user.getCpr(), vaccinStatusDate);
         }
         this.serviceInterface.updateUser(user);
 
@@ -569,10 +615,8 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
     }
 
 
-
-
     @GetMapping("/infectionDash")
-    public String showInfectionDash(){
+    public String showInfectionDash() {
         return "infectionCenter/infectionDash";
     }
 
@@ -583,12 +627,14 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
         model.addAttribute("searchList", searchList);
         return "secretary/searchByName";
     }
+
     @GetMapping("/searchByPositive")
     public String searchByPositive(@ModelAttribute User val, Model model) {
         List<User> positiveList = serviceInterface.fetchAllPositive();
         model.addAttribute("positiveList", positiveList);
         return "secretary/searchByName";
     }
+
     @GetMapping("/searchByNegative")
     public String searchByNegative(@ModelAttribute User val, Model model) {
         List<User> negativeList = serviceInterface.fetchAllNegative();
@@ -601,6 +647,8 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
 
         return "secretary/secretaryDash";
     }
+
+
     @GetMapping("/searchByCpr")
     public String searchByCpr(@ModelAttribute User val, Model model) {
         long cprL = Long.parseLong(val.getCpr());
@@ -609,26 +657,78 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
         return "secretary/searchByName";
     }
 
-// write log(date,time and ip of the local device ) into log.txt file
+    // write log(date,time and ip of the local device ) into log.txt file
     public void saveLogs(String myLogs) throws IOException {
-       try {
-           File file = new File("log.txt");
-           BufferedWriter out = new BufferedWriter(new FileWriter(file));
-           out.write(myLogs);
-           out.close();
-       }catch (IOException e){
-           e.printStackTrace();
-       }
+        try {
+            File file = new File("log.txt");
+            BufferedWriter out = new BufferedWriter(new FileWriter(file));
+            out.write(myLogs);
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+    @GetMapping("/seeAppointments")
+    public String showSeeAppointment() {
+        return "administrator/seeAppointments";
+    }
+
+    @GetMapping("/secretaryVdash")
+    public String showSecretaryVdash() {
+        return "vaccinCenter/secretaryVdash";
+    }
+
+    @GetMapping("/messageToUser")
+    public String ShowMessage() {
+        return "infectionCenter/messageToUser";
+    }
+
+    @GetMapping("/vmessageToUser")
+    public String ShowVMessage() {
+        return "vaccinCenter/cMessageToUser";
+    }
+
+    @GetMapping("/vaccinCenterDash")
+    public String ShowCDash() {
+        return "vaccinCenter/vaccinCenterDash";
+    }
+
+    @PostMapping("/messageI")
+    public String showMessageToUser(@ModelAttribute Imessage imessage) {
+        List<Imessage> imessages = serviceInterface.fetchAllImessage();
+        for (Imessage im : imessages) {
+            if (imessage.getCpr().equals(im.getCpr())) {
+                serviceInterface.deleteMessage(im.getCpr());
+                break;
+            }
+        }
+        serviceInterface.addImessage(imessage.getCpr(), imessage.getMessageI());
+        return "infectionCenter/messageToUser";
+    }
+
+
+    @PostMapping("/messageV")
+    public String showVmessageToUser(@ModelAttribute Vmessage vmessage) {
+        List<Vmessage> vmessages = serviceInterface.fetchAllVmessage();
+        for (Vmessage vm : vmessages) {
+            if (vmessage.getCpr().equals(vm.getCpr())) {
+                serviceInterface.deleteVmessage(vm.getCpr());
+                break;
+            }
+        }
+        serviceInterface.addVmessage(vmessage.getCpr(), vmessage.getMessageV());
+        return "vaccinCenter/cMessageToUser";
+    }
+
 
     // source of inspiration https://stackoverflow.com/questions/9481865/getting-the-ip-address-of-the-current-machine-using-java
 
-public String getIpAddress() throws UnknownHostException {
-    InetAddress IP= InetAddress.getLocalHost();
-    String ip ="Local ip address of user machine := "+IP.getHostAddress();
+    public String getIpAddress() throws UnknownHostException {
+        InetAddress IP = InetAddress.getLocalHost();
+        String ip = "Local ip address of user machine := " + IP.getHostAddress();
         return ip;
-}
-
+    }
 
 
 }

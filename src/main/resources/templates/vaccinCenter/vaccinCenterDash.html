@@ -1,10 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <div th:replace="fragments/fragment :: bootstrap"></div>
+    <title>Main page</title>
+    <div th:replace="fragments/fragment :: cssDash"></div>
+
+
 </head>
 <body>
 
+<div id="div1">
+    <div th:replace="fragments/fragment :: goBack"></div>
+    <br>
+
+    <hr>
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Secretary</h1>
+            <a th:href="@{/login}" class="btn btn-primary">Click Me</a>
+        </div>
+    </div>
+    <hr>
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Administrator</h1>
+            <a th:href="@{/login}" class="btn btn-primary">Click Me</a>
+        </div>
+    </div>
+
+
+
+
+    <a style="color: black !important" class="nav-link" th:href="@{/}"><button>Logout</button></a>
+
+</div>
+<div th:replace="fragments/fragment :: cookies"></div>
 </body>
 </html>

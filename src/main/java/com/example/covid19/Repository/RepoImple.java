@@ -200,6 +200,46 @@ public class RepoImple implements RepoInterface {
         return jdbcTemplate.query(sql, rowMapper3);
     }
 
+    @Override
+    public List<Imessage> fetchAllImessage() {
+        String sql = "Select * from Imessage";
+        RowMapper<Imessage> rowMapper4 = new BeanPropertyRowMapper<>(Imessage.class);
+        return jdbcTemplate.query(sql, rowMapper4);
+    }
+
+    @Override
+    public void addImessage(String cpr, String messageI) {
+        String sql = "Insert into Imessage(cpr,messageI) values(?,?)";
+        jdbcTemplate.update(sql, cpr,messageI);
+    }
+
+    @Override
+    public boolean deleteMessage(String cpr) {
+        String sql = "Delete from Imessage where cpr = ?";
+        jdbcTemplate.update(sql,cpr);
+        return true;
+    }
+
+    @Override
+    public List<Vmessage> fetchAllVmessage() {
+        String sql = "Select * from Vmessage";
+        RowMapper<Vmessage> rowMapper5 = new BeanPropertyRowMapper<>(Vmessage.class);
+        return jdbcTemplate.query(sql, rowMapper5);
+    }
+
+    @Override
+    public void addVmessage(String cpr, String messageV) {
+        String sql = "Insert into Vmessage(cpr,messageV) values(?,?)";
+        jdbcTemplate.update(sql, cpr,messageV);
+    }
+
+    @Override
+    public boolean deleteVmessage(String cpr) {
+        String sql = "Delete from Vmessage where cpr = ?";
+        jdbcTemplate.update(sql,cpr);
+        return true;
+    }
+
 
     public List<User> fetchAllNegative() {
         String sql = "Select * from User where tsID = 2";
