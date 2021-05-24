@@ -20,9 +20,12 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class homeController {
@@ -34,12 +37,19 @@ public class homeController {
     String testStatus;
     String currentAppointment;
     String userAppointment = "";
+    Map<String,Date> vaccinStatusChanged = new HashMap<String,Date>();
+    Map<String,Date> testStatusChanged = new HashMap<String,Date>();
+    int recentTestStatusID=0;
+    int recentVaccinStatusID =0;
+    Date testStatusDate;
+    Date vaccinStatusDate;
+    int currentTcID=0;
+    String currentTestCenterName="";
+    String appointmentTestCenterName="";
 
 
     @Autowired
     ServiceInterface serviceInterface;
-
-
 
     @GetMapping("/")
     public String showDashboard() throws IOException{
@@ -66,9 +76,6 @@ public class homeController {
             }
         }
 
-
-
-
         return "home/dashboard";
     }
 
@@ -81,9 +88,6 @@ public class homeController {
     public String showChooseTestCenter(){
         return "home/chooseTestCenter";
     }
-
-
-
 
     @GetMapping("/makeAppointment")
     public String showMakeAppointment(Model model){
@@ -99,7 +103,7 @@ public class homeController {
             }
         }
 
-
+        model.addAttribute("appointmentTestCenterName",appointmentTestCenterName);
         model.addAttribute("allAppointments",allAppointments);
         model.addAttribute("appointmentDetails",appointmentDetails);
         model.addAttribute("timeSlots",mytimeSlots);
@@ -109,12 +113,24 @@ public class homeController {
     }
     @GetMapping("/getCoronaPass")
     public String showCoronaPass(Model model) {
+        Date currentDate=null;
         List<User> userList = serviceInterface.fetchAllUser();
+        List<TestStatusDate> testStatusDates = serviceInterface.fetchAllTestStatusDate();
+        for(int i=0;i<testStatusDates.size();i++){
+            if (currentUser.getCpr().equals(testStatusDates.get(i).getCpr())){
+                currentDate=testStatusDates.get(i).getTestStatusDate();
+            }
+        }
+
+
         if (currentUser.getTsID() == 2) {
 
-            Date today = new Date();
-            Date afterTomorrow = new Date(System.currentTimeMillis() + 86400 * 1000 * 2);
-            model.addAttribute("today", today);
+            Date today = currentDate;
+
+          Long milsec = today.getTime();
+
+            Date afterTomorrow = new Date(milsec + 86400 * 1000 * 2);
+            model.addAttribute("today", currentDate);
             model.addAttribute("afterTomorrow", afterTomorrow);
             model.addAttribute("userList", userList);
             model.addAttribute("myUser", currentUser);
@@ -268,13 +284,15 @@ public class homeController {
        }
 
         this.serviceInterface.addUser(user);
+       Date date = new Date();
+       this.serviceInterface.addDates(user.getCpr(),user.getTsID(),date,user.getVsID(),date);
 
         return "home/login";
     }
     @PostMapping("/testCenterName")
     public String testme(@ModelAttribute TestCenter testCenter, Model model) {
         TestCenterName = testCenter.getCname();
-        System.out.println(TestCenterName);
+
        if(TestCenterName.equals("CPH-Center")){
            tcID =1;
            serviceInterface.updateTestCenterId(currentUser.getCpr(),tcID);
@@ -300,7 +318,7 @@ public class homeController {
         List<Appointment> allAppointments = serviceInterface.fetchAllAppointments();
         int  testStatusID=0;
         int vaccinNameID=0;
-        String appointmentTestCenterName="";
+
         int aTcID = 0;
         String recentCpr = "";
         String testCenterMessage = "";
@@ -361,6 +379,7 @@ public class homeController {
         model.addAttribute("vaccinCenterMessage",vaccinCenterMessage);
         model.addAttribute("userAppointment",userAppointment);
        model.addAttribute("TestCenterName",TestCenterName);
+       model.addAttribute("currentTestCenterName",currentTestCenterName);
        model.addAttribute("currentUser",currentUser.getUserName());
 
         return "home/index";
@@ -382,7 +401,6 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
     String hour = timeM.substring(0, 2);
     String minute = timeM.substring(3);
     String receivedDate = year+"-"+month+"-"+day+" "+hour+":"+minute+":00";
-
     String str = (year +"-"+month+"-"+day+" "+hour+":"+minute);
     DateTimeFormatter dtf=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     LocalDateTime dateTime = LocalDateTime.parse(str,dtf);
@@ -397,6 +415,7 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
             model.addAttribute("cprError", cprError);
             currentAppointment = " "+appList.get(i).getLocalDateTime().toString()+" ";
             model.addAttribute("bookedAppointment",currentAppointment);
+            model.addAttribute("appointmentTestCenterName",appointmentTestCenterName);
             return "home/makeAppointment";
 
         } else if (appList.get(i).getLocalDateTime().toString().equals(receivedDate) && appList.get(i).getTcID()== tcID) {
@@ -452,10 +471,6 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
         serviceInterface.addAppointment(cpr,tcID,dateTime);
         return "secretary/secretaryDash";
     }
-
-
-
-
 
     public boolean logIncheck1(String userName, String password) {
         boolean correct = false;
@@ -528,15 +543,34 @@ public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
     @GetMapping("/updateHome/{id}")
     public String showFormForUpdate(@PathVariable(value = "id") int id, Model md) {
         User user = serviceInterface.fetchSingleUser(id);
+        recentTestStatusID= user.getTsID();
+        recentVaccinStatusID = user.getVsID();
         md.addAttribute("user", user);
         return "secretary/userUpdatePage";
     }
 
+
+
+
+
     @PostMapping("/updateHome")
     public String saveEmployee(@ModelAttribute("user") User user) {
+        if(user.getTsID()!= recentTestStatusID){
+            testStatusDate=new Date();
+            this.serviceInterface.updateTestStatusDate(user.getCpr(),testStatusDate);
+        }
+        if(user.getVsID()!= recentVaccinStatusID){
+            vaccinStatusDate=new Date();
+            this.serviceInterface.updateVaccinStatusDate(user.getCpr(),vaccinStatusDate);
+        }
         this.serviceInterface.updateUser(user);
+
         return "redirect:/UpdateUserHome";
     }
+
+
+
+
     @GetMapping("/infectionDash")
     public String showInfectionDash(){
         return "infectionCenter/infectionDash";

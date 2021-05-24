@@ -1,11 +1,9 @@
 package com.example.covid19.Service;
 
-import com.example.covid19.Model.Appointment;
-import com.example.covid19.Model.TestCenter;
-import com.example.covid19.Model.TimeSlots;
-import com.example.covid19.Model.User;
+import com.example.covid19.Model.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 public interface ServiceInterface {
@@ -26,4 +24,8 @@ public interface ServiceInterface {
     public List<User> fetchAllNegative();
     public List<User> fetchAllPositive();
     public List<User> fetchAllByCpr(long cpr);
+    public void addDates(String cpr, int tsID, Date testStatusDate, int vsID, Date vaccinStatusDate);
+    public void updateTestStatusDate(String cpr, Date testStatusDate);
+    public void updateVaccinStatusDate(String cpr,Date vaccinStatusDate);
+    public List<TestStatusDate> fetchAllTestStatusDate();
 }

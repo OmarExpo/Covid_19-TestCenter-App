@@ -1,9 +1,6 @@
 package com.example.covid19.Repository;
 
-import com.example.covid19.Model.Appointment;
-import com.example.covid19.Model.TestCenter;
-import com.example.covid19.Model.TimeSlots;
-import com.example.covid19.Model.User;
+import com.example.covid19.Model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -171,6 +169,37 @@ public class RepoImple implements RepoInterface {
         RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
         return jdbcTemplate.query(sql,rowMapper,cpr);
     }
+
+    @Override
+    public void addDates(String cpr, int tsID, Date testStatusDate, int vsID, Date vaccinStatusDate) {
+        String sql = "Insert into TestStatusDate(cpr,tsID,testStatusDate,vsID,vaccinStatusDate) values(?,?,?,?,?)";
+        jdbcTemplate.update(sql, cpr,tsID,testStatusDate,vsID,vaccinStatusDate);
+    }
+
+    @Override
+    public void updateTestStatusDate(String cpr, Date testStatusDate) {
+        String sql= "Update TestStatusDate set "+
+                "testStatusDate = ?"+
+                "where cpr = ?";
+        jdbcTemplate.update(sql,testStatusDate,cpr);
+    }
+
+    @Override
+    public void updateVaccinStatusDate(String cpr, Date vaccinStatusDate) {
+        String sql= "Update TestStatusDate set " +
+                "vaccinStatusDate = "+
+                "where cpr = ?";
+        jdbcTemplate.update(sql,vaccinStatusDate,cpr);
+
+    }
+
+    @Override
+    public List<TestStatusDate> fetchAllTestStatusDate() {
+        String sql = "Select * from TestStatusDate";
+        RowMapper<TestStatusDate> rowMapper3 = new BeanPropertyRowMapper<>(TestStatusDate.class);
+        return jdbcTemplate.query(sql, rowMapper3);
+    }
+
 
     public List<User> fetchAllNegative() {
         String sql = "Select * from User where tsID = 2";

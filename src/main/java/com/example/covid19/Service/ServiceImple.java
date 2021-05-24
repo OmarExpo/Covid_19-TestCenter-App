@@ -1,9 +1,6 @@
 package com.example.covid19.Service;
 
-import com.example.covid19.Model.Appointment;
-import com.example.covid19.Model.TestCenter;
-import com.example.covid19.Model.TimeSlots;
-import com.example.covid19.Model.User;
+import com.example.covid19.Model.*;
 import com.example.covid19.Repository.RepoInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -15,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -106,6 +104,27 @@ public class ServiceImple implements ServiceInterface {
     public List<User> fetchAllByCpr(long cpr) {
         return repoInterface.fetchAllByCpr(cpr);
     }
+
+    @Override
+    public void addDates(String cpr, int tsID, Date testStatusDate, int vsID, Date vaccinStatusDate) {
+        repoInterface.addDates(cpr, tsID, testStatusDate, vsID, vaccinStatusDate);
+    }
+
+    @Override
+    public void updateTestStatusDate(String cpr, Date testStatusDate) {
+        repoInterface.updateTestStatusDate(cpr, testStatusDate);
+    }
+
+    @Override
+    public void updateVaccinStatusDate(String cpr, Date vaccinStatusDate) {
+        repoInterface.updateVaccinStatusDate(cpr, vaccinStatusDate);
+    }
+
+    @Override
+    public List<TestStatusDate> fetchAllTestStatusDate() {
+        return repoInterface.fetchAllTestStatusDate();
+    }
+
 
     @Override
     public List<User> fetchAllNegative() {
