@@ -2,23 +2,18 @@
 <html lang="en" xmlns:th="https://thymeleaf.org">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Covid-19 IT Solution</title>
-    <style>
-        body{
-            background-color: rgb(109,109,109);
-        }
-        table{
-            background-color: cornsilk;
-        }
-    </style>
-
+    <title>Covid-19 IT solution</title>
+    <div th:replace="fragments/fragment :: bootstrap"></div>
+    <div th:replace="fragments/fragment :: cssDash"></div>
 </head>
 <body>
 <div th:replace="fragments/fragment :: goBack"></div>
-<div id="maindiv">
+<br>
+<hr>
+<div id="div1">
     <div class="card">
         <div class="card-body">
-            <div>
+            <div style="overflow-x:auto;">
                 <table border="1" cellpadding="10">
                     <br/><br/>
                     <tr>
@@ -45,7 +40,7 @@
                         <td th:text="${t1.getTsID()}"></td>
                         <td th:text="${t1.getVsID()}"></td>
                         <td th:text="${t1.getVacNameID()}"></td>
-                        <td> <a th:href="@{/delete/{id}(id=${t1.userID})}" class="btn btn-primary"><button>PickMe</button></a>
+                        <td> <a th:href="@{/updateHome1/{id}(id=${t1.userID})}" class="btn btn-primary"><button>Edit</button></a><label></label>
                         </td>
                     </tr>
                 </table>
@@ -54,6 +49,8 @@
 
         </div>
     </div>
+    <a style="color: black !important" class="nav-link" th:href="@{/}"><button>Logout</button></a>
 </div>
+
 </body>
 </html>

@@ -111,13 +111,13 @@ public class ServiceImple implements ServiceInterface {
     }
 
     @Override
-    public void updateTestStatusDate(String cpr, Date testStatusDate) {
-        repoInterface.updateTestStatusDate(cpr, testStatusDate);
+    public void updateTestStatusDate(String cpr, int tsID,Date testStatusDate) {
+        repoInterface.updateTestStatusDate(cpr, tsID, testStatusDate);
     }
 
     @Override
-    public void updateVaccinStatusDate(String cpr, Date vaccinStatusDate) {
-        repoInterface.updateVaccinStatusDate(cpr, vaccinStatusDate);
+    public void updateVaccinStatusDate(String cpr,int vsID, Date vaccinStatusDate) {
+        repoInterface.updateVaccinStatusDate(cpr, vsID, vaccinStatusDate);
     }
 
     @Override

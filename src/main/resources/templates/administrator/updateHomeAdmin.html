@@ -16,7 +16,7 @@
     <hr>
     <h2>Edit User</h2>
 
-    <form action="#" th:action="@{/updateHome}" th:object="${user}"
+    <form action="#" th:action="@{/updateHome1}" th:object="${user}"
           method="POST">
 
 
@@ -24,20 +24,20 @@
         <input type="text" th:field="*{name}" class="form-control mb-4 col-4" >
         <label> user name</label>
         <input type="text" th:field="*{userName}" class="form-control mb-4 col-4">
-        <input type="text" th:field="*{password}" class="form-control mb-4 col-4" hidden>
+        <input type="text" th:field="*{password}" class="form-control mb-4 col-4" >
         <input type="text" th:field="*{cpr}" class="form-control mb-4 col-4" hidden>
         <label>phone number</label>
         <input type="number" th:field="*{phone}" class="form-control mb-4 col-4">
         <label> Test Center ID</label>
-        <input type="number" th:field="*{tcID}" class="form-control mb-4 col-4" hidden>
+        <input type="number" th:field="*{tcID}" class="form-control mb-4 col-4" >
         <label>Vaccin Center ID</label>
-        <input type="number" th:field="*{vcID}" class="form-control mb-4 col-4" hidden>
+        <input type="number" th:field="*{vcID}" class="form-control mb-4 col-4" >
         <label>Test Status ID</label>
-        <input type="number" th:field="*{tsID}" class="form-control mb-4 col-4" hidden>
+        <input type="number" th:field="*{tsID}" class="form-control mb-4 col-4" >
         <label>Vaccin Status ID</label>
-        <input type="number" th:field="*{vsID}" class="form-control mb-4 col-4" hidden>
+        <input type="number" th:field="*{vsID}" class="form-control mb-4 col-4" >
         <label>Vaccine Name ID</label>
-        <input type="number" th:field="*{vacNameID}" class="form-control mb-4 col-4" hidden>
+        <input type="number" th:field="*{vacNameID}" class="form-control mb-4 col-4">
 
         <button type="submit" class="btn btn-info col-2"> Update </button>
     </form>

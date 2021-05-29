@@ -177,19 +177,21 @@ public class RepoImple implements RepoInterface {
     }
 
     @Override
-    public void updateTestStatusDate(String cpr, Date testStatusDate) {
-        String sql= "Update TestStatusDate set "+
-                "testStatusDate = ?"+
+    public void updateTestStatusDate(String cpr, int tsID, Date testStatusDate) {
+        String sql= "Update TestStatusDate set " +
+                "tsID = ? " +
+                ",testStatusDate = ? " +
                 "where cpr = ?";
-        jdbcTemplate.update(sql,testStatusDate,cpr);
+        jdbcTemplate.update(sql, tsID, testStatusDate, cpr);
     }
 
     @Override
-    public void updateVaccinStatusDate(String cpr, Date vaccinStatusDate) {
+    public void updateVaccinStatusDate(String cpr, int vsID, Date vaccinStatusDate) {
         String sql= "Update TestStatusDate set " +
-                "vaccinStatusDate = "+
+                "vsID = ? " +
+                ",vaccinStatusDate = ? " +
                 "where cpr = ?";
-        jdbcTemplate.update(sql,vaccinStatusDate,cpr);
+        jdbcTemplate.update(sql,vsID,vaccinStatusDate,cpr);
 
     }
 

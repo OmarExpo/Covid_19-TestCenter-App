@@ -1,56 +1,53 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://thymeleaf.org"><head>
+<html lang="en"xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="UTF-8" >
+    <div th:replace="fragments/fragment :: bootstrap"></div>
+    <title>Covid-19 IT Solution</title>
+    <div th:replace="fragments/fragment :: cssDash"></div>
+
+
 </head>
 <body>
 <div th:replace="fragments/fragment :: goBack"></div>
-<br>
-<hr>
-<p>
-    Covid-19 GDPR Policy
+
+<div id="div1">
 
 
 
-<h6>Categories of personal data and the legal basis for the processing of your personal data</h6>
-<h5>We may process the following categories of personal information about you:</h5>
-
-   <h4>Ordinary, non-sensitive personal information</h4>
-
-   <ul>Name</ul>
-
-    <ul>Address</ul>
-
-<h4>Health insurance group</h4>
-
-   <ul>Own doctor's external number</ul>
-
-<h4>General, confidential personal information:</h4>
+    <div class="card">
+        <div class="card-body">
+            Covid-19 GDPR Policy
 
 
 
-<ul>CPR numbers</ul>
+            <h6>Categories of personal data and the legal basis for the processing of your personal data</h6>
+            <h5>We may process the following categories of personal information about you:</h5>
 
-    <ul>Sensitive personal information:</ul>
-<ul>Biological material from the sample we take.</ul>
-<ul>Health information in the form of answers to whether you are infected with a new coronavirus / COVID-19.</ul>
-<ul>for example health information in the form of an answer as to whether you are infected with one of the new ones </ul>
-   <ul>virus variants.</ul>
+            <h4>Ordinary, non-sensitive personal information</h4>
 
+            <ul>Name</ul>
 
+            <ul>Address</ul>
 
+            <h4>Health insurance group</h4>
 
+            <ul>Own doctor's external number</ul>
+            <h4>General, confidential personal information:</h4>
+            <ul>CPR numbers</ul>
 
+            <ul>Sensitive personal information:</ul>
+            <ul>Biological material from the sample we take.</ul>
+            <ul>Health information in the form of answers to whether you are infected with a new coronavirus / COVID-19.</ul>
+            <ul>for example health information in the form of an answer as to whether you are infected with one of the new ones </ul>
+            <ul>virus variants.</ul>
+            <h3>For further information , do not hegitate to contact at :- kris47f9@stud.kea.dk</h3>
+            <hr>
+            <a th:href="@{/login}"><button  class="btn btn-info">back to login page</button></a>
+        </div>
+    </div>
+    <hr>
+</div>
 
-
-
-
-<h3>For further information , do not hegitate to contact at :- kris47f9@stud.kea.dk</h3>
-
-
-</p>
-<hr>
-<a th:href="@{/login}"><button  class="btn btn-info">back to login page</button></a>
 </body>
 </html>

@@ -25,8 +25,8 @@ public interface ServiceInterface {
     public List<User> fetchAllPositive();
     public List<User> fetchAllByCpr(long cpr);
     public void addDates(String cpr, int tsID, Date testStatusDate, int vsID, Date vaccinStatusDate);
-    public void updateTestStatusDate(String cpr, Date testStatusDate);
-    public void updateVaccinStatusDate(String cpr,Date vaccinStatusDate);
+    public void updateTestStatusDate(String cpr, int tsID, Date testStatusDate);
+    public void updateVaccinStatusDate(String cpr, int vsID, Date vaccinStatusDate);
     public List<TestStatusDate> fetchAllTestStatusDate();
     public List<Imessage> fetchAllImessage();
     public void addImessage(String cpr,String messageI);

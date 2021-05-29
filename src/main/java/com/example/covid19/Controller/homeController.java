@@ -37,8 +37,8 @@ public class homeController {
     String testStatus;
     String currentAppointment;
     String userAppointment = "";
-    Map<String, Date> vaccinStatusChanged = new HashMap<String, Date>();
-    Map<String, Date> testStatusChanged = new HashMap<String, Date>();
+    //Map<String, Date> vaccinStatusChanged = new HashMap<String, Date>();
+    //Map<String, Date> testStatusChanged = new HashMap<String, Date>();
     int recentTestStatusID = 0;
     int recentVaccinStatusID = 0;
     Date testStatusDate;
@@ -330,10 +330,8 @@ public class homeController {
         List<Appointment> allAppointments = serviceInterface.fetchAllAppointments();
         List<Imessage> imessages = serviceInterface.fetchAllImessage();
         List<Vmessage> vmessages = serviceInterface.fetchAllVmessage();
-
         int testStatusID = 0;
         int vaccinNameID = 0;
-
         int aTcID = 0;
         String recentCpr = "";
         String testCenterMessage = "";
@@ -345,24 +343,12 @@ public class homeController {
 
                 aTcID = allAppointments.get(i).getTcID();
                 switch (aTcID) {
-                    case 1:
-                        appointmentTestCenterName = "CPH-Center";
-                        break;
-                    case 2:
-                        appointmentTestCenterName = "CPH-North";
-                        break;
-                    case 3:
-                        appointmentTestCenterName = "CPH-South";
-                        break;
-                    case 4:
-                        appointmentTestCenterName = "CPH-East";
-                        break;
-                    case 5:
-                        appointmentTestCenterName = "CPH-West";
-                        break;
-                    default:
-                        appointmentTestCenterName = "not available please contact secretary office";
-                        break;
+                    case 1 -> appointmentTestCenterName = "CPH-Center";
+                    case 2 -> appointmentTestCenterName = "CPH-North";
+                    case 3 -> appointmentTestCenterName = "CPH-South";
+                    case 4 -> appointmentTestCenterName = "CPH-East";
+                    case 5 -> appointmentTestCenterName = "CPH-West";
+                    default -> appointmentTestCenterName = "not available please contact secretary office";
                 }
 
                 userAppointment = allAppointments.get(i).getLocalDateTime().toString() + "Test center";
@@ -388,18 +374,13 @@ public class homeController {
                 break;
 
         }
-        switch (vaccinNameID) {
-            case 0:
-                vaccinCenterMessage = "You are not called for vaccination";
-                break;
-            case 1:
-                vaccinCenterMessage = "you are vaccinated 1st time";
-                break;
-            default:
-                vaccinCenterMessage = "Your vaccination is completed";
-                break;
 
-        }
+        vaccinCenterMessage = switch (vaccinNameID) {
+            case 0 -> "You are not called for vaccination";
+            case 1 -> "you are vaccinated 1st time";
+            default -> "Your vaccination is completed";
+        };
+
         for (Imessage ims : imessages) {
             if (ims.getCpr().equals(cpr1)) {
                 idcMessage = ims.getMessageI();
@@ -589,6 +570,23 @@ public class homeController {
     }
 
 
+
+
+
+    @GetMapping("/UpdateUserHome1")
+    public String showUserUpdateHome1(Model model) {
+        List<User> userList = serviceInterface.fetchAllUser();
+        model.addAttribute("userList", userList);
+        return "administrator/updateUserAdmin";
+    }
+    @GetMapping("/updateUserAdmin")
+    public String showUpdateUserAdmin(Model model) {
+        List<User> userList = serviceInterface.fetchAllUser();
+        model.addAttribute("userList", userList);
+        return "administrator/updateUserAdmin";
+    }
+
+
     @GetMapping("/updateHome/{id}")
     public String showFormForUpdate(@PathVariable(value = "id") int id, Model md) {
         User user = serviceInterface.fetchSingleUser(id);
@@ -598,16 +596,43 @@ public class homeController {
         return "secretary/userUpdatePage";
     }
 
+    @GetMapping("/updateHome1/{id}")
+    public String showFormForUpdate1(@PathVariable(value = "id") int id, Model md) {
+        User user = serviceInterface.fetchSingleUser(id);
+        recentTestStatusID = user.getTsID();
+        recentVaccinStatusID = user.getVsID();
+        md.addAttribute("user", user);
+        return "administrator/updateHomeAdmin";
 
-    @PostMapping("/updateHome")
-    public String saveEmployee(@ModelAttribute("user") User user) {
+
+    }
+
+
+    @PostMapping("/updateHome1")
+    public String saveUser1(@ModelAttribute("user") User user) {
         if (user.getTsID() != recentTestStatusID) {
             testStatusDate = new Date();
-            this.serviceInterface.updateTestStatusDate(user.getCpr(), testStatusDate);
+            this.serviceInterface.updateTestStatusDate(user.getCpr(),user.getTsID(), testStatusDate);
         }
         if (user.getVsID() != recentVaccinStatusID) {
             vaccinStatusDate = new Date();
-            this.serviceInterface.updateVaccinStatusDate(user.getCpr(), vaccinStatusDate);
+            this.serviceInterface.updateVaccinStatusDate(user.getCpr(), user.getVsID(),vaccinStatusDate);
+        }
+        this.serviceInterface.updateUser(user);
+
+        return "redirect:/updateUserAdmin";
+    }
+
+
+    @PostMapping("/updateHome")
+    public String saveUser(@ModelAttribute("user") User user) {
+        if (user.getTsID() != recentTestStatusID) {
+            testStatusDate = new Date();
+            this.serviceInterface.updateTestStatusDate(user.getCpr(),user.getTsID(), testStatusDate);
+        }
+        if (user.getVsID() != recentVaccinStatusID) {
+            vaccinStatusDate = new Date();
+            this.serviceInterface.updateVaccinStatusDate(user.getCpr(), user.getVsID(),vaccinStatusDate);
         }
         this.serviceInterface.updateUser(user);
 
