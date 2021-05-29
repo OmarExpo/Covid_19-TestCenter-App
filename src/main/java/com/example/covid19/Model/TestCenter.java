@@ -1,8 +1,8 @@
 package com.example.covid19.Model;
 
 public class TestCenter {
-    int tcID;
-    String cname;
+    private int tcID;
+    private String cname;
 
     public TestCenter() {
     }

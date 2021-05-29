@@ -3,11 +3,11 @@ package com.example.covid19.Model;
 import java.util.Date;
 
 public class TestStatusDate {
-    String cpr;
-    int tsID;
-    Date testStatusDate;
-    int vsID;
-    Date vaccinStatusDate;
+    private String cpr;
+    private int tsID;
+    private Date testStatusDate;
+    private int vsID;
+    private Date vaccinStatusDate;
 
     public TestStatusDate() {
     }

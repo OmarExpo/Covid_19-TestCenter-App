@@ -155,6 +155,11 @@ repoInterface.addVmessage(cpr,messageV);
         return repoInterface.deleteVmessage(cpr);
     }
 
+    @Override
+    public boolean deleteTestStatusDate(String cpr) {
+        return repoInterface.deleteTestStatusDate(cpr);
+    }
+
 
     @Override
     public List<User> fetchAllNegative() {

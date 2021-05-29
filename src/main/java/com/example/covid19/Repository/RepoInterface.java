@@ -13,7 +13,6 @@ public interface RepoInterface {
     public List<User> fetchCpr();
     public List<Appointment> fetchAllAppointments();
     public void addAppointment(String cpr, int tcID, LocalDateTime dateTime);
-    //public void addAppointment(String cpr,int tcID,String day,String month,String year,String hour,String minute);
     public List<TimeSlots> fetchAllTimeSlots();
     public User fetchSingleUser(int id);
     public User updateUser(User user);
@@ -35,5 +34,7 @@ public interface RepoInterface {
     public List<Vmessage> fetchAllVmessage();
     public void addVmessage(String cpr,String messageV);
     public boolean deleteVmessage(String cpr);
+    public boolean deleteTestStatusDate(String cpr);
+
 
 }

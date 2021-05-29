@@ -1,8 +1,8 @@
 package com.example.covid19.Model;
 
 public class Vmessage {
-    String cpr;
-    String messageV;
+    private String cpr;
+    private String messageV;
 
     public Vmessage() {
     }

@@ -9,8 +9,8 @@ import javax.persistence.Id;
 public class TimeSlots {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    int id;
-    String time;
+    private int id;
+    private String time;
 
     public TimeSlots() {
     }

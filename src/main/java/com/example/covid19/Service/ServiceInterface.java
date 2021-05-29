@@ -34,5 +34,6 @@ public interface ServiceInterface {
     public List<Vmessage> fetchAllVmessage();
     public void addVmessage(String cpr,String messageV);
     public boolean deleteVmessage(String cpr);
+    public boolean deleteTestStatusDate(String cpr);
 
 }

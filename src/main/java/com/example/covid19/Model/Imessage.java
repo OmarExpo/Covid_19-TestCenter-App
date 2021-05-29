@@ -1,8 +1,8 @@
 package com.example.covid19.Model;
 
 public class Imessage {
-    String cpr;
-    String messageI;
+    private String cpr;
+    private String messageI;
 
 
     public Imessage() {

@@ -37,8 +37,6 @@ public class homeController {
     String testStatus;
     String currentAppointment;
     String userAppointment = "";
-    //Map<String, Date> vaccinStatusChanged = new HashMap<String, Date>();
-    //Map<String, Date> testStatusChanged = new HashMap<String, Date>();
     int recentTestStatusID = 0;
     int recentVaccinStatusID = 0;
     Date testStatusDate;
@@ -50,9 +48,14 @@ public class homeController {
 
     @Autowired
     ServiceInterface serviceInterface;
+    // default page handler
 
     @GetMapping("/")
     public String showDashboard() throws IOException {
+        currentTestCenterName = "";
+        currentAppointment = "";
+        userAppointment = "";
+        String appointmentTestCenterName = "";
 
         List<Appointment> allAppointments = serviceInterface.fetchAllAppointments();
         Date myDate = new Date();
@@ -112,6 +115,7 @@ public class homeController {
         return "home/makeAppointment";
     }
 
+    // corona pass handler
     @GetMapping("/getCoronaPass")
     public String showCoronaPass(Model model) {
         Date currentDate = null;
@@ -158,6 +162,7 @@ public class homeController {
         return "home/gdpr";
     }
 
+    // user dashboard
     @GetMapping("/index")
     public String showIndex(Model model) {
         List<Appointment> allAppointments = serviceInterface.fetchAllAppointments();
@@ -219,6 +224,7 @@ public class homeController {
         return "home/login";
     }
 
+    // log in
     @PostMapping("/user")
     public ModelAndView login(@ModelAttribute LoginCheck loginCheck, Model model) {
 
@@ -262,6 +268,7 @@ public class homeController {
         }
     }
 
+    // creates a user
     @PostMapping("/createList")
     public String create(@ModelAttribute User user, Model model) {
         String error = "";
@@ -301,10 +308,12 @@ public class homeController {
         this.serviceInterface.addUser(user);
         Date date = new Date();
         this.serviceInterface.addDates(user.getCpr(), user.getTsID(), date, user.getVsID(), date);
-
+        this.serviceInterface.addVmessage(user.getCpr(),"You do not have any message from vaccin center yet");
+        this.serviceInterface.addImessage(user.getCpr(),"You do not have any message from Infection detection center yet");
         return "home/login";
     }
 
+    // validates and records testcenter name
     @PostMapping("/testCenterName")
     public String testme(@ModelAttribute TestCenter testCenter, Model model) {
         TestCenterName = testCenter.getCname();
@@ -337,7 +346,7 @@ public class homeController {
         String testCenterMessage = "";
         String vaccinCenterMessage = "";
         String idcMessage = "";
-        String vMessage="";
+        String vMessage = "";
         for (int i = 0; i < allAppointments.size(); i++) {
             if (allAppointments.get(i).getCpr().equals(currentUser.getCpr())) {
 
@@ -412,6 +421,7 @@ public class homeController {
         return "home/index";
     }
 
+    // make an appointment
     @GetMapping("/takeDate")
     public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
 
@@ -454,9 +464,10 @@ public class homeController {
         }
 
         serviceInterface.addAppointment(cpr1, tcID, dateTime);
-        return "home/makeAppointment";
+        return "redirect:/index";
     }
 
+    // appointment by admin or secretary
     @GetMapping("/DirectAppointment")
     public String makeDirectAppointment(@ModelAttribute DateAndTime dt, Model model) {
 
@@ -502,6 +513,7 @@ public class homeController {
         return "secretary/secretaryDash";
     }
 
+    // Login check
     public boolean logIncheck1(String userName, String password) {
         boolean correct = false;
         List<User> userList = serviceInterface.fetchAllUser();
@@ -539,6 +551,9 @@ public class homeController {
     @GetMapping("/delete/{id}")
     public String deleteMe(@PathVariable(value = "id") int id) {
         List<Appointment> appList = serviceInterface.fetchAllAppointments();
+        List<Imessage> imessageList = serviceInterface.fetchAllImessage();
+        List<Vmessage> vmessageList = serviceInterface.fetchAllVmessage();
+        List<TestStatusDate> testStatusDateList = serviceInterface.fetchAllTestStatusDate();
         User user = serviceInterface.fetchSingleUser(id);
         long cprA = Long.parseLong(user.getCpr());
 
@@ -549,6 +564,29 @@ public class homeController {
                 serviceInterface.deleteAppointment(cprA);
             }
         }
+        for (int i = 0; i < imessageList.size(); i++) {
+
+            if (imessageList.get(i).getCpr().equals(user.getCpr())) {
+
+                serviceInterface.deleteMessage(user.getCpr());
+            }
+        }
+        for (int i = 0; i < vmessageList.size(); i++) {
+
+            if (vmessageList.get(i).getCpr().equals(user.getCpr())) {
+
+                serviceInterface.deleteVmessage(user.getCpr());
+            }
+        }
+        for (int i = 0; i < testStatusDateList.size(); i++) {
+
+            if (testStatusDateList.get(i).getCpr().equals(user.getCpr())) {
+
+                serviceInterface.deleteTestStatusDate(user.getCpr());
+            }
+        }
+
+
         serviceInterface.deleteUser(id);
 
         return ("redirect:/deleteUser");
@@ -570,15 +608,13 @@ public class homeController {
     }
 
 
-
-
-
     @GetMapping("/UpdateUserHome1")
     public String showUserUpdateHome1(Model model) {
         List<User> userList = serviceInterface.fetchAllUser();
         model.addAttribute("userList", userList);
         return "administrator/updateUserAdmin";
     }
+
     @GetMapping("/updateUserAdmin")
     public String showUpdateUserAdmin(Model model) {
         List<User> userList = serviceInterface.fetchAllUser();
@@ -612,11 +648,11 @@ public class homeController {
     public String saveUser1(@ModelAttribute("user") User user) {
         if (user.getTsID() != recentTestStatusID) {
             testStatusDate = new Date();
-            this.serviceInterface.updateTestStatusDate(user.getCpr(),user.getTsID(), testStatusDate);
+            this.serviceInterface.updateTestStatusDate(user.getCpr(), user.getTsID(), testStatusDate);
         }
         if (user.getVsID() != recentVaccinStatusID) {
             vaccinStatusDate = new Date();
-            this.serviceInterface.updateVaccinStatusDate(user.getCpr(), user.getVsID(),vaccinStatusDate);
+            this.serviceInterface.updateVaccinStatusDate(user.getCpr(), user.getVsID(), vaccinStatusDate);
         }
         this.serviceInterface.updateUser(user);
 
@@ -628,11 +664,11 @@ public class homeController {
     public String saveUser(@ModelAttribute("user") User user) {
         if (user.getTsID() != recentTestStatusID) {
             testStatusDate = new Date();
-            this.serviceInterface.updateTestStatusDate(user.getCpr(),user.getTsID(), testStatusDate);
+            this.serviceInterface.updateTestStatusDate(user.getCpr(), user.getTsID(), testStatusDate);
         }
         if (user.getVsID() != recentVaccinStatusID) {
             vaccinStatusDate = new Date();
-            this.serviceInterface.updateVaccinStatusDate(user.getCpr(), user.getVsID(),vaccinStatusDate);
+            this.serviceInterface.updateVaccinStatusDate(user.getCpr(), user.getVsID(), vaccinStatusDate);
         }
         this.serviceInterface.updateUser(user);
 
@@ -645,6 +681,7 @@ public class homeController {
         return "infectionCenter/infectionDash";
     }
 
+    // This method is responsible for user search by name
     @GetMapping("/searchByName")
     public String searchByName(@ModelAttribute User val, Model model) {
         String name = val.getName();
@@ -653,6 +690,7 @@ public class homeController {
         return "secretary/searchByName";
     }
 
+    // This method is responsible for user search by positive
     @GetMapping("/searchByPositive")
     public String searchByPositive(@ModelAttribute User val, Model model) {
         List<User> positiveList = serviceInterface.fetchAllPositive();
@@ -660,6 +698,7 @@ public class homeController {
         return "secretary/searchByName";
     }
 
+    // This method is responsible for user search by negative
     @GetMapping("/searchByNegative")
     public String searchByNegative(@ModelAttribute User val, Model model) {
         List<User> negativeList = serviceInterface.fetchAllNegative();
@@ -719,6 +758,7 @@ public class homeController {
         return "vaccinCenter/vaccinCenterDash";
     }
 
+    //this method records the message from Infection detection  center to specific user
     @PostMapping("/messageI")
     public String showMessageToUser(@ModelAttribute Imessage imessage) {
         List<Imessage> imessages = serviceInterface.fetchAllImessage();
@@ -732,7 +772,7 @@ public class homeController {
         return "infectionCenter/messageToUser";
     }
 
-
+    //this method records the message from vaccin center to specific user
     @PostMapping("/messageV")
     public String showVmessageToUser(@ModelAttribute Vmessage vmessage) {
         List<Vmessage> vmessages = serviceInterface.fetchAllVmessage();

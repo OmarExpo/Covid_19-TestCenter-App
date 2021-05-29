@@ -242,6 +242,13 @@ public class RepoImple implements RepoInterface {
         return true;
     }
 
+    @Override
+    public boolean deleteTestStatusDate(String cpr) {
+        String sql = "Delete from TestStatusDate where cpr = ?";
+        jdbcTemplate.update(sql,cpr);
+        return true;
+    }
+
 
     public List<User> fetchAllNegative() {
         String sql = "Select * from User where tsID = 2";
