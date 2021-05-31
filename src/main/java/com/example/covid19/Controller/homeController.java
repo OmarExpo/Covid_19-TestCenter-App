@@ -44,6 +44,11 @@ public class homeController {
     int currentTcID = 0;
     String currentTestCenterName = "";
     String appointmentTestCenterName = "";
+    String testCenterMessage = "";
+    int testStatusID;
+    int vaccinNameID;
+    int vaccinStatusID;
+    String vaccinStatus;
 
 
     @Autowired
@@ -71,7 +76,7 @@ public class homeController {
             String month1 = allAppointments.get(i).getLocalDateTime().toString().substring(5, 7);
 
 
-            if ((Integer.parseInt(day1) < Integer.parseInt(day)) && (Integer.parseInt(month) <= Integer.parseInt(month1))) {
+            if ((Integer.parseInt(day1) < Integer.parseInt(day)) && (Integer.parseInt(month1) <= Integer.parseInt(month))) {
                 long cpr = Long.parseLong(allAppointments.get(i).getCpr());
                 serviceInterface.deleteAppointment(cpr);
 
@@ -143,10 +148,10 @@ public class homeController {
             return "home/getCoronaPass";
         } else if (currentUser.getTsID() == 1) {
             model.addAttribute("haMessage", "Message from health authorities: \nYour status is positive please get isolated and contact your own doctor.");
-            return "home/index";
+            return "home/coronaAlert";
         } else {
             model.addAttribute("haMessage", "Message from health authorities: \nYou are not tested yet please make a test to get corona pass");
-            return "home/index";
+            return "home/coronaAlert";
         }
 
     }
@@ -162,62 +167,7 @@ public class homeController {
         return "home/gdpr";
     }
 
-    // user dashboard
-    @GetMapping("/index")
-    public String showIndex(Model model) {
-        List<Appointment> allAppointments = serviceInterface.fetchAllAppointments();
-        List<User> allUsers = serviceInterface.fetchAllUser();
-        String appointmentDetails = "";
-        int testStatusID = 0;
-        int vaccinNameID = 0;
-        String recentCpr = "";
-        String testCenterMessage = "";
-        String vaccinCenterMessage = "";
 
-        for (int i = 0; i < allAppointments.size(); i++) {
-            if (allAppointments.get(i).getCpr().equals(currentUser.getCpr())) {
-                appointmentDetails = "You have an appointment on  " + allAppointments.get(i).getLocalDateTime().toString();
-                recentCpr = currentUser.getCpr();
-            }
-        }
-        for (int i = 0; i < allUsers.size(); i++) {
-            if (allUsers.get(i).getCpr().equals(recentCpr)) {
-                testStatusID = allUsers.get(i).getTsID();
-                vaccinNameID = allUsers.get(i).getVacNameID();
-            }
-
-        }
-        switch (testStatusID) {
-            case 0:
-                testCenterMessage = "You are not yet tested or your test result is not ready";
-                break;
-            case 1:
-                testCenterMessage = "Your test status is positive.";
-                break;
-            default:
-                testCenterMessage = "Your test status is negative ";
-                break;
-
-        }
-        switch (vaccinNameID) {
-            case 0:
-                vaccinCenterMessage = "You are not called for vaccination";
-                break;
-            case 1:
-                vaccinCenterMessage = "you are vaccinated 1st time";
-                break;
-            default:
-                vaccinCenterMessage = "Your vaccination is completed";
-                break;
-
-        }
-        model.addAttribute("currentUser", currentUser.getUserName());
-        model.addAttribute("testCenterMessage", testCenterMessage);
-        model.addAttribute("vaccinCenterMessage", vaccinCenterMessage);
-        model.addAttribute("userAppointment", userAppointment);
-        model.addAttribute("TestCenterName", TestCenterName);
-        return "home/index";
-    }
 
     @GetMapping("/login")
     public String showlogin() {
@@ -242,7 +192,7 @@ public class homeController {
 
             return modelAndView;
         } else if (logIncheck1(loginCheck.getUserName(), (loginCheck.getPassword()))) {
-            System.out.println(logIncheck1(loginCheck.getUserName(), (loginCheck.getPassword())));
+            //System.out.println(logIncheck1(loginCheck.getUserName(), (loginCheck.getPassword())));
             ModelAndView modelAndView = new ModelAndView("home/chooseTestCenter");
             UserName = loginCheck.getUserName();
             String vennueName = TestCenterName;
@@ -310,8 +260,13 @@ public class homeController {
         this.serviceInterface.addDates(user.getCpr(), user.getTsID(), date, user.getVsID(), date);
         this.serviceInterface.addVmessage(user.getCpr(),"You do not have any message from vaccin center yet");
         this.serviceInterface.addImessage(user.getCpr(),"You do not have any message from Infection detection center yet");
-        return "home/login";
+        return "home/dashboard";
     }
+
+
+
+
+
 
     // validates and records testcenter name
     @PostMapping("/testCenterName")
@@ -339,11 +294,9 @@ public class homeController {
         List<Appointment> allAppointments = serviceInterface.fetchAllAppointments();
         List<Imessage> imessages = serviceInterface.fetchAllImessage();
         List<Vmessage> vmessages = serviceInterface.fetchAllVmessage();
-        int testStatusID = 0;
-        int vaccinNameID = 0;
+
         int aTcID = 0;
         String recentCpr = "";
-        String testCenterMessage = "";
         String vaccinCenterMessage = "";
         String idcMessage = "";
         String vMessage = "";
@@ -365,49 +318,63 @@ public class homeController {
         }
 
         for (int i = 0; i < allUsers.size(); i++) {
-            if (allUsers.get(i).getCpr().equals(recentCpr)) {
+            if (allUsers.get(i).getCpr().equals(cpr1)) {
                 testStatusID = allUsers.get(i).getTsID();
+                vaccinStatusID = allUsers.get(i).getVsID();
                 vaccinNameID = allUsers.get(i).getVacNameID();
-            }
+                if(testStatusID ==0){
+                    testCenterMessage = "--->   Not tested";
 
-        }
-        switch (testStatusID) {
-            case 0:
-                testCenterMessage = "You are not yet tested or your test result is not ready";
-                break;
-            case 1:
-                testCenterMessage = "Your test status is positive.";
-                break;
-            default:
-                testCenterMessage = "Your test status is negative ";
-                break;
+                } else if(testStatusID ==1){
+                    testCenterMessage = "--->   Positive.";
 
-        }
+                }else{
+                    testCenterMessage = "--->   Negative ";
 
-        vaccinCenterMessage = switch (vaccinNameID) {
-            case 0 -> "You are not called for vaccination";
-            case 1 -> "you are vaccinated 1st time";
-            default -> "Your vaccination is completed";
-        };
+                }
 
-        for (Imessage ims : imessages) {
-            if (ims.getCpr().equals(cpr1)) {
-                idcMessage = ims.getMessageI();
+                if(vaccinStatusID ==0){
+                    vaccinStatus = "--->    Not vaccinated";
 
-                break;
-            } else {
-                continue;
+                } else if(testStatusID ==1){
+                    vaccinStatus = " --->   Vaccinated first dose";
+
+                }else{
+                    vaccinStatus = "--->    Vaccinated both doses.";
+
+                }
+
+
             }
         }
-        for (Vmessage vms : vmessages) {
-            if (vms.getCpr().equals(cpr1)) {
-                vMessage = vms.getMessageV();
 
-                break;
-            } else {
-                continue;
+
+
+
+            vaccinCenterMessage = switch (vaccinNameID) {
+                case 0 -> "You are not called for vaccination";
+                case 1 -> "you are vaccinated 1st time";
+                default -> "Your vaccination is completed";
+            };
+
+            for (Imessage ims : imessages) {
+                if (ims.getCpr().equals(cpr1)) {
+                    idcMessage = ims.getMessageI();
+
+                    break;
+                } else {
+                    continue;
+                }
             }
-        }
+            for (Vmessage vms : vmessages) {
+                if (vms.getCpr().equals(cpr1)) {
+                    vMessage = vms.getMessageV();
+
+                    break;
+                } else {
+                    continue;
+                }
+            }
 
         model.addAttribute("appointmentTestCenterName", appointmentTestCenterName);
         model.addAttribute("testCenterMessage", testCenterMessage);
@@ -417,6 +384,7 @@ public class homeController {
         model.addAttribute("currentTestCenterName", currentTestCenterName);
         model.addAttribute("currentUser", currentUser.getUserName());
         model.addAttribute("idcMessage", idcMessage);
+        model.addAttribute("vaccinStatus", vaccinStatus);
 
         return "home/index";
     }
@@ -424,7 +392,7 @@ public class homeController {
     // make an appointment
     @GetMapping("/takeDate")
     public String getDateTime(@ModelAttribute DateAndTime dt, Model model) {
-
+        System.out.println(dt.toString());
         String cpr = dt.getCpr();
         Date dateM = dt.getMydate();
         String timeM = dt.getTime();
@@ -464,7 +432,7 @@ public class homeController {
         }
 
         serviceInterface.addAppointment(cpr1, tcID, dateTime);
-        return "redirect:/index";
+        return "home/chooseTestCenter";
     }
 
     // appointment by admin or secretary
@@ -654,6 +622,15 @@ public class homeController {
             vaccinStatusDate = new Date();
             this.serviceInterface.updateVaccinStatusDate(user.getCpr(), user.getVsID(), vaccinStatusDate);
         }
+        if(user.getTsID()==0){
+            testCenterMessage = "You are not tested yet";
+        }
+        if(user.getTsID()==1){
+            testCenterMessage = "Your status is positive please be isolated";
+        }
+        if(user.getTsID()==0){
+            testCenterMessage = "Your status is negative";
+        }
         this.serviceInterface.updateUser(user);
 
         return "redirect:/updateUserAdmin";
@@ -706,10 +683,66 @@ public class homeController {
         return "secretary/searchByName";
     }
 
+
+
+
+
+
+
+    @GetMapping("/searchByNameA")
+    public String searchByNameA(@ModelAttribute User val, Model model) {
+        String name = val.getName();
+        List<User> searchList = serviceInterface.searchByName(name);
+        model.addAttribute("searchList", searchList);
+        return "administrator/searchByNameA";
+    }
+
+    // This method is responsible for user search by positive
+    @GetMapping("/searchByPositiveA")
+    public String searchByPositiveA(@ModelAttribute User val, Model model) {
+        List<User> positiveList = serviceInterface.fetchAllPositive();
+        model.addAttribute("positiveList", positiveList);
+        return "administrator/searchByNameA";
+    }
+
+    // This method is responsible for user search by negative
+    @GetMapping("/searchByNegativeA")
+    public String searchByNegativeA(@ModelAttribute User val, Model model) {
+        List<User> negativeList = serviceInterface.fetchAllNegative();
+        model.addAttribute("negativeList", negativeList);
+        return "administrator/searchByNameA";
+    }
+    @GetMapping("/searchByCprA")
+    public String searchByCprA(@ModelAttribute User val, Model model) {
+        long cprL = Long.parseLong(val.getCpr());
+        List<User> searchListCpr = serviceInterface.fetchAllByCpr(cprL);
+        model.addAttribute("searchListCpr", searchListCpr);
+        return "administrator/searchByNameA";
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @GetMapping("/secretaryDash")
     public String showSecretaryDash() {
 
         return "secretary/secretaryDash";
+    }
+    @GetMapping("/administratorDash")
+    public String showAdministratorDash() {
+
+        return "administrator/administratorDash";
     }
 
 
@@ -734,7 +767,12 @@ public class homeController {
     }
 
     @GetMapping("/seeAppointments")
-    public String showSeeAppointment() {
+    public String showSeeAppointment(Model model) {
+
+        List<Appointment> allMyAppointments = serviceInterface.fetchAllAppointments();
+        model.addAttribute("appointmentsList",allMyAppointments);
+
+
         return "administrator/seeAppointments";
     }
 

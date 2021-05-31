@@ -8,19 +8,20 @@
 <body>
 <div  id="div1">
     <a style="color: black !important" class="nav-link" th:href="@{/}"><button>Logout</button></a>
-    <a th:href="@{/secretaryDash}"><button>Go to secretary dashboard</button></a>
 
-
+    <a th:href="@{/administratorDash}"><button>Go to administrator dashboard</button></a>
+    <a style="float: left" th:href="@{/}">
+        <button>Log Out</button>
+    </a>
 
     <div class="card">
         <div class="card-body">
-            <div th:replace="fragments/fragment :: goBack"></div>
             <hr>
             <h2> Search By Name</h2>
 
             <br>
             <hr>
-            <form  method="get" action="#" th:action="@{/searchByName}">
+            <form  method="get" action="#" th:action="@{/searchByNameA}">
                 <label>name</label><input type="text" name="name" placeholder="Enter name" required>
                 <input type="submit">
             </form>
@@ -71,7 +72,7 @@
 
             <hr>
             <h2> Search by positive</h2>
-            <form  method="get" action="#" th:action="@{/searchByPositive}">
+            <form  method="get" action="#" th:action="@{/searchByPositiveA}">
                 <button type="submit">See all positive Status users</button>
             </form>
             <hr>
@@ -118,7 +119,7 @@
 
             <hr>
             <h2> Search by Negative</h2>
-            <form  method="get" action="#" th:action="@{/searchByNegative}">
+            <form  method="get" action="#" th:action="@{/searchByNegativeA}">
                 <button type="submit">See all Negative Status Users</button>
             </form>
             <hr>
@@ -164,7 +165,7 @@
             </div>
             <hr>
             <h2> Search By cpr</h2>
-            <form  method="get" action="#" th:action="@{/searchByCpr}">
+            <form  method="get" action="#" th:action="@{/searchByCprA}">
                 <label>Cpr</label><input type="number" name="cpr" placeholder="Enter CPR" required>
                 <input type="submit">
             </form>

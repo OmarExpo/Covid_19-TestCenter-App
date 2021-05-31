@@ -11,7 +11,14 @@
 <div class="container">
     <marquee> <h1>update user </h1></marquee>
     <hr>
-    <div th:replace="fragments/fragment :: goBack"></div>
+    <hr>
+    <div><a style="float: left" th:href="@{/}">
+        <button >Log Out</button>
+    </a>
+        <input style="float: right" type="button" value="Go back!" onclick="history.back()"></div>
+    <br>
+
+    <hr>
     <br>
     <hr>
     <h2>Edit User</h2>
@@ -24,20 +31,21 @@
         <input type="text" th:field="*{name}" class="form-control mb-4 col-4" >
         <label> user name</label>
         <input type="text" th:field="*{userName}" class="form-control mb-4 col-4">
-        <input type="text" th:field="*{password}" class="form-control mb-4 col-4" hidden>
+        <label> password</label>
+        <input type="text" th:field="*{password}" class="form-control mb-4 col-4" >
         <input type="text" th:field="*{cpr}" class="form-control mb-4 col-4" hidden>
         <label>phone number</label>
         <input type="number" th:field="*{phone}" class="form-control mb-4 col-4">
-        <label> Test Center ID</label>
+
         <input type="number" th:field="*{tcID}" class="form-control mb-4 col-4" hidden>
-        <label>Vaccin Center ID</label>
-        <input type="number" th:field="*{vcID}" class="form-control mb-4 col-4" hidden>
-        <label>Test Status ID</label>
-        <input type="number" th:field="*{tsID}" class="form-control mb-4 col-4" hidden>
-        <label>Vaccin Status ID</label>
-        <input type="number" th:field="*{vsID}" class="form-control mb-4 col-4" hidden>
-        <label>Vaccine Name ID</label>
-        <input type="number" th:field="*{vacNameID}" class="form-control mb-4 col-4" hidden>
+
+        <input type="number"  th:field="*{vcID}" class="form-control mb-4 col-4" hidden>
+
+        <input type="number"  th:field="*{tsID}" class="form-control mb-4 col-4" hidden>
+
+        <input type="number"   th:field="*{vsID}" class="form-control mb-4 col-4" hidden>
+
+        <input type="number"  th:field="*{vacNameID}" class="form-control mb-4 col-4" hidden>
 
         <button type="submit" class="btn btn-info col-2"> Update </button>
     </form>

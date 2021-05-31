@@ -11,26 +11,29 @@
 
 
 <div th:replace="fragments/fragment :: mynavbar"></div>
-<hr>
-<div th:replace="fragments/fragment :: goBack"></div>
-<br>
-<hr>
+
 <div id="div1">
 
     <div class="card">
         <div class="card-body">
+            <br>
+            <input style="float: right" type="button" value="Go back!" onclick="history.back()">
+            <br>
             <hr>
-            <h6 style="color:#FF00FF"
-                th:text=" 'User name:- ' + ${currentUser} + '  Your selected location is:-  ' + ${TestCenterName}"></h6>
+            <h2 style="color:#FF00FF"
+                th:text=" 'User name:- ' + ${currentUser} + '  Your selected location is:-  ' + ${TestCenterName}"></h2>
             <hr>
-            <h6 th:text="'Your appointment: ' + ${userAppointment}+'   Location: '+ ${appointmentTestCenterName}"></h6>
+            <h3 th:text="'Your appointment: ' + ${userAppointment}+'   Location: '+ ${appointmentTestCenterName}"></h3>
             <hr>
-            <h6 th:text="' your test status:     ' + ${testCenterMessage}"></h6>
+            <h3 th:text="' Your test status:     ' + ${testCenterMessage}"></h3>
             <hr>
-            <h6 th:text="' Infection detection center:     ' + ${idcMessage}"></h6>
+            <h3 th:text="' Your vaccin  status:     ' + ${vaccinStatus}"></h3>
+
             <hr>
-            <h6 th:text="' Message from Vaccin Center:     ' + ${vaccinCenterMessage}"></h6>
-            <h6 th:text="${haMessage}"></h6>
+            <h3 th:text="' Infection detection center:     ' + ${idcMessage}"></h3>
+            <hr>
+            <h3 th:text="' Message from Vaccin Center:     ' + ${vaccinCenterMessage}"></h3>
+
         </div>
     </div>
 </div>

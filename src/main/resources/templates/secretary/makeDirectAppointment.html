@@ -22,13 +22,23 @@
 <div th:replace="fragments/fragment :: secretaryNavBar"></div>
 <br>
 <hr>
-<div th:replace="fragments/fragment :: goBack"></div>
+
 <br>
 <hr>
 
 <div id="maindiv">
     <div class="card">
         <div class="card-body">
+            <hr>
+            <div><a style="float: left" th:href="@{/}">
+                <button >Log Out</button>
+            </a>
+                <input style="float: right" type="button" value="Go back!" onclick="history.back()"></div>
+            <br>
+
+            <hr>
+
+
 <div>
             <h1 style="text-align: center"> Make an appointment </h1>
             <hr>
@@ -46,12 +56,12 @@
                     </div>
                     <div>
                         <label>Enter cpr</label>
-                        <input type="text" id="cpr" name="cpr" placeholder="choose date" required>
+                        <input type="text" id="cpr" name="cpr" placeholder="choose date" pattern="[0-9]{1}[0-9]{9}" required>
                     </div>
 
                     <div>
                         <label>Test center ID</label>
-                        <input type="number" id="tcID" name="tcID" placeholder="testCenterID" required>
+                        <input min="1" max="5" type="number" id="tcID" name="tcID" placeholder="testCenterID" required>
                     </div>
 
                     <div class="form-group">
@@ -66,12 +76,7 @@
 
                 </form>
                 <hr>
-                <a style="float: left" th:href="@{/}">
-                    <button>Log Out</button>
-                </a>
-                <a style="float: right" th:href="@{/index}">
-                    <button>back</button>
-                </a>
+
                 <hr>
 
             </table>
@@ -81,7 +86,28 @@
     </div>
 
 </div>
-    <div th:replace="fragments/fragment :: dateFormater"></div>
+</div>
+    <script>
+        $(function () {
+            var dtToday = new Date();
+            var month = dtToday.getMonth() + 1;
+            var day = dtToday.getDate() + 2;
+            var day1 = dtToday.getDate() + 1;
+            var year = dtToday.getFullYear();
+            if (month < 10)
+                month = '0' + month.toString();
+            if (day < 10)
+                day = '0' + day.toString();
+            var maxDate = year + '-' + month + '-' + day;
+            var minDate = year + '-' + month + '-' + day1;
+            $('#mydate').attr('max', maxDate);
+            $('#mydate').attr('min', minDate);
+
+
+        });
+
+
+    </script>
 
 </body>
 </html>

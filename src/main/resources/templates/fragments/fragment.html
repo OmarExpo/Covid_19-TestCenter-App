@@ -5,7 +5,7 @@
 
 <div th:fragment="mynavbar">
     <nav class="navbar navbar-light navbar-expand-lg primary">
-        <a class="navbar-brand" href="/">Covid 19</a>
+        <a class="navbar-brand" href="/chooseTestCenter">Covid 19</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNavDropdown" aria-expanded="true" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -19,8 +19,9 @@
                     <a style="color: black !important" class="nav-link" th:href="@{/getCoronaPass}">Get corona pass</a>
                 </li>
                 <li class="nav-item">
-                    <a style="color: black !important" class="nav-link" th:href="@{/}">Logout</a>
-                </li>
+                <a style="color: black !important" class="nav-link" th:href="@{/}">Logout</a>
+            </li>
+
             </ul>
         </div>
     </nav>
@@ -71,31 +72,6 @@
 </div>
 
 
-<div th:fragment="dateFormater">
-
-
-    <script>
-        $(function () {
-            var dtToday = new Date();
-            var month = dtToday.getMonth() + 1;
-            var day = dtToday.getDate() + 2;
-            var day1 = dtToday.getDate() + 1;
-            var year = dtToday.getFullYear();
-            if (month < 10)
-                month = '0' + month.toString();
-            if (day < 10)
-                day = '0' + day.toString();
-            var maxDate = year + '-' + month + '-' + day;
-            var minDate = year + '-' + month + '-' + day1;
-            $('#mydate').attr('max', maxDate);
-            $('#mydate').attr('min', minDate);
-
-
-        });
-
-
-    </script>
-</div>
 
 
 
