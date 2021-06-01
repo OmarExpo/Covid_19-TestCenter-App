@@ -336,12 +336,15 @@ public class homeController {
                 if(vaccinStatusID ==0){
                     vaccinStatus = "--->    Not vaccinated";
 
-                } else if(testStatusID ==1){
+                } else if(vaccinStatusID ==1){
                     vaccinStatus = " --->   Vaccinated first dose";
 
-                }else{
+                }else if (vaccinStatusID == 2){
                     vaccinStatus = "--->    Vaccinated both doses.";
 
+                }
+                else{
+                    vaccinStatus = "--->    Not vaccinated";
                 }
 
 

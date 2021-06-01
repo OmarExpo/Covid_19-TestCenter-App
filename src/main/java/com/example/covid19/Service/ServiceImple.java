@@ -160,6 +160,16 @@ repoInterface.addVmessage(cpr,messageV);
         return repoInterface.deleteTestStatusDate(cpr);
     }
 
+    @Override
+    public void updateImessage(String cpr, String imessage) {
+        repoInterface.updateImessage(cpr, imessage);
+    }
+
+    @Override
+    public void updateVmessage(String cpr, String vmessage) {
+        repoInterface.updateVmessage(cpr, vmessage);
+    }
+
 
     @Override
     public List<User> fetchAllNegative() {

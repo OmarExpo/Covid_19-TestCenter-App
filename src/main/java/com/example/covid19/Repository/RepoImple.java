@@ -249,11 +249,29 @@ public class RepoImple implements RepoInterface {
         return true;
     }
 
+    @Override
+    public void updateImessage(String cpr, String imessage) {
+        String sql= "Update Imessage set " +
+                "messageI = ? " +
+                "where cpr = ?";
+        jdbcTemplate.update(sql,imessage,cpr);
+    }
+
+    @Override
+    public void updateVmessage(String cpr, String vmessage) {
+        String sql= "Update Vmessage set " +
+                "messageV = ? " +
+                "where cpr = ?";
+        jdbcTemplate.update(sql,vmessage,cpr);
+    }
+
 
     public List<User> fetchAllNegative() {
         String sql = "Select * from User where tsID = 2";
         RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
         return jdbcTemplate.query(sql, rowMapper);
     }
+
+
 
 }

@@ -35,6 +35,8 @@ public interface RepoInterface {
     public void addVmessage(String cpr,String messageV);
     public boolean deleteVmessage(String cpr);
     public boolean deleteTestStatusDate(String cpr);
+    public void updateImessage(String cpr,String imessage);
+    public void updateVmessage(String cpr, String vmessage);
 
 
 }
