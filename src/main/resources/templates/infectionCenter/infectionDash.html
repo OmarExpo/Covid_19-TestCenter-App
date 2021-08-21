@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" >
+    <div th:replace="fragments/fragment :: bootstrap"></div>
+    <title>Infection Detection Center</title>
+    <div th:replace="fragments/fragment :: cssDash"></div>
+
+
+</head>
+<body>
+<div id="div1">
+    <!--input style="float: left" type="button" value="Go back!" onclick="history.back()"-->
+
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Secretary</h1>
+            <a th:href="@{/login}" class="btn btn-primary">Click Me</a>
+        </div>
+    </div>
+    <hr>
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Administrator</h1>
+            <a th:href="@{/login}" class="btn btn-primary">Click Me</a>
+        </div>
+    </div>
+
+    <a style="float: left" class="nav-link" th:href="@{/}"><button>Back to homepage</button></a>
+    <!--color: black !important-->
+</div>
+</body>
+</html>

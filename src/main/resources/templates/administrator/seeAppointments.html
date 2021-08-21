@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://thymeleaf.org">
+<head>
+    <div th:replace="fragments/fragment :: bootstrap"></div>
+    <title>Covid-19 IT Solution</title>
+    <div th:replace="fragments/fragment :: cssDash"></div>
+</head>
+<body>
+<div id="div1">
+
+    <div th:replace="fragments/fragment :: goBack"></div>
+    <div class="card">
+        <div class="card-body">
+            <h3 style="text-align: left; color: blue"> Test center name with center id </h3>
+            <div th:replace="fragments/fragment :: testCenter">
+            </div>
+        </div>
+
+
+        <div class="card">
+            <div class="card-body">
+                <h3 style="color: blue;text-align: left"> All appointments and their test center code Please see the
+                    table above to know the code of test center.</h3>
+                <div style="overflow-x:auto;">
+
+                    <table border="1" cellpadding="10" style="margin: auto">
+                        <br/><br/>
+                        <tr>
+                            <th>cpr</th>
+                            <th>Test Center ID</th>
+                            <th>Date and time</th>
+
+
+                        </tr>
+                        <tr th:each="t1 : ${appointmentsList}">
+                            <td th:text="${t1.getCpr()}"></td>
+                            <td th:text="${t1.getTcID()}"></td>
+                            <td th:text="${t1.getLocalDateTime()}"></td>
+
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+    </div>
+</body>
+</html>

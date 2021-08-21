@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" >
+    <div th:replace="fragments/fragment :: bootstrap"></div>
+    <title>Covid-19 IT Solution</title>
+    <div th:replace="fragments/fragment :: cssDash"></div>
+
+    <style>
+
+    </style>
+</head>
+<body>
+<hr>
+
+<hr>
+<div id="div1">
+    <a style="float: left" th:href="@{/}">
+        <button >Log Out</button>
+    </a>
+    <input  style="float: right; background-color: yellow" type="button" value="Go back!" onclick="history.back()">
+
+    <marquee><h3 style="color: blue">Administrator dashboard</h3></marquee>
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Delete User</h1>
+            <a th:href="@{/deleteUser}" class="btn btn-primary">Click Me</a>
+        </div>
+    </div>
+    <hr>
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">See All appointments</h1>
+            <a th:href="@{/seeAppointments}" class="btn btn-primary">Click Me</a>
+        </div>
+    </div>
+    <hr>
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Specific search for user</h1>
+            <a th:href="@{/searchByNameA}" class="btn btn-primary">Click Me</a>
+        </div>
+    </div>
+    <hr>
+    <hr>
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Add User</h1>
+            <a th:href="@{/signUp}" class="btn btn-primary">Click Me</a>
+        </div>
+    </div>
+    <hr>
+    <hr>
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Make Direct Appointment</h1>
+            <a th:href="@{/makeDirectAppointment}" class="btn btn-primary">Click Me</a>
+        </div>
+    </div>
+    <hr>
+    <hr>
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Update user</h1>
+            <a th:href="@{/UpdateUserHome1}" class="btn btn-primary">Click Me</a>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

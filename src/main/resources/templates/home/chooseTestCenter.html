@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en"xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" >
+    <div th:replace="fragments/fragment :: bootstrap"></div>
+    <title>Covid-19 IT Solution</title>
+    <div th:replace="fragments/fragment :: cssDash"></div>
+
+
+</head>
+<body>
+<br>
+<hr>
+<div id="div1">
+    <hr>
+    <marquee><h3 style="color: blue">Please choose Test Center</h3></marquee>
+    <hr>
+
+    <hr>
+    <a style="float: right" th:href="@{/}"><button>Logout</button></a>
+    <br>
+    <hr>
+
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">CPH-Center</h1>
+        <form method="post" action="/testCenterName">
+            <input type="text" class="form-control"  name="cname" value="CPH-Center" hidden>
+            <button  type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+<hr>
+
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">CPH-North</h1>
+        <form method="post" action="/testCenterName">
+            <input type="text" class="form-control"  name="cname" value="CPH-North" hidden>
+            <button  type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+<hr>
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">CPH-South</h1>
+            <form method="post" action="/testCenterName">
+                <input type="text" class="form-control"  name="cname" value="CPH-South" hidden>
+                <button  type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+<hr>
+
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">CPH-East</h1>
+                <form method="post" action="/testCenterName">
+                    <input type="text" class="form-control"  name="cname" value="CPH-East" hidden>
+                    <button  type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+<hr>
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title">CPH-West</h1>
+                    <form method="post" action="/testCenterName">
+                    <input type="text" class="form-control"  name="cname" value="CPH-West" hidden>
+                    <button  type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                </div>
+            </div>
+
+            </div>
+
+
+
+
+</body>
+</html>

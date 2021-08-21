@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Covid-19 IT Solution</title>
+
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <marquee> <h1>update user </h1></marquee>
+    <hr>
+    <div th:replace="fragments/fragment :: goBack"></div>
+    <br>
+    <hr>
+    <h2>Edit User</h2>
+
+    <form action="#" th:action="@{/updateHome1}" th:object="${user}"
+          method="POST">
+
+
+        <input type="hidden" th:field="*{userID}" hidden>
+        <input type="text" th:field="*{name}" class="form-control mb-4 col-4" >
+        <label> user name</label>
+        <input type="text" th:field="*{userName}" class="form-control mb-4 col-4">
+        <input type="text" th:field="*{password}" class="form-control mb-4 col-4" >
+        <input type="text" th:field="*{cpr}" class="form-control mb-4 col-4" hidden>
+        <label>phone number</label>
+        <input type="number" th:field="*{phone}" class="form-control mb-4 col-4">
+        <label> Test Center ID</label>
+        <input type="number" min="0" max="5" th:field="*{tcID}" class="form-control mb-4 col-4" >
+        <label>Vaccin Center ID</label>
+        <input type="number" min="0" max="5" th:field="*{vcID}" class="form-control mb-4 col-4" >
+        <label>Test Status ID</label>
+        <input type="number" min="0" max="2" th:field="*{tsID}" class="form-control mb-4 col-4" >
+        <label>Vaccin Status ID</label>
+        <input type="number" min="0" max="2" th:field="*{vsID}" class="form-control mb-4 col-4" >
+        <label>Vaccine Name ID</label>
+        <input type="number" min="0" max="2" th:field="*{vacNameID}" class="form-control mb-4 col-4">
+
+        <button type="submit" class="btn btn-info col-2"> Update </button>
+    </form>
+
+    <hr>
+
+</div>
+</body>
+</html>

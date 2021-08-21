@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Covid-19 IT solution</title>
+    <div th:replace="fragments/fragment :: bootstrap"></div>
+    <div th:replace="fragments/fragment :: cssDash"></div>
+</head>
+<body>
+
+<br>
+<hr>
+<div id="div1">
+<br>
+    <hr>
+    <a style="float: left" th:href="@{/}">
+        <button>Log Out</button>
+    </a>
+    <input style="float: right" type="button" value="Go back!" onclick="history.back()">
+    <br>
+    <hr>
+    <div class="card">
+        <div class="card-body">
+
+
+            <div style="overflow-x:auto;">
+                <table border="1" cellpadding="10">
+                    <br/><br/>
+                    <tr>
+                        <th>Full name</th>
+                        <th>User name</th>
+                        <th>password</th>
+                        <th>cpr</th>
+                        <th>Phone</th>
+                        <th>TestCenterID</th>
+                        <th>VaccinCenterID</th>
+                        <th>TestStatusID</th>
+                        <th>VaccinStatusID</th>
+                        <th>VaccinNameID</th>
+
+                    </tr>
+                    <tr th:each="t1 : ${userList}">
+                        <td th:text="${t1.getName()}"></td>
+                        <td th:text="${t1.getUserName()}"></td>
+                        <td th:text="${t1.getPassword()}"></td>
+                        <td th:text="${t1.getCpr()}"></td>
+                        <td th:text="${t1.getPhone()}"></td>
+                        <td th:text="${t1.getTcID()}"></td>
+                        <td th:text="${t1.getVcID()}"></td>
+                        <td th:text="${t1.getTsID()}"></td>
+                        <td th:text="${t1.getVsID()}"></td>
+                        <td th:text="${t1.getVacNameID()}"></td>
+                        <td><a th:href="@{/updateHome1/{id}(id=${t1.userID})}" class="btn btn-primary">
+                            <button>Edit</button>
+                        </a><label></label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

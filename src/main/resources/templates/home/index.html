@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Covid-19 IT solution</title>
+    <div th:replace="fragments/fragment :: bootstrap"></div>
+    <div th:replace="fragments/fragment :: cssDash"></div>
+
+</head>
+<body style="background-color: darkturquoise">
+<!--F6E5E9-->
+
+<div th:replace="fragments/fragment :: mynavbar"></div>
+
+<div id="div1">
+
+    <hr>
+    <!--marquee--><!--h3 style="color: #FF00FF">User Dashboard</h3></marquee-->
+    <marquee behavior="scroll" direction="right"><h3>User Dashboard</h3></marquee>
+    <hr>
+
+    <div class="card">
+        <div class="card-body">
+            <!--br>
+            <input style="float: right" type="button" value="Go back!" onclick="history.back()">
+            <br-->
+            <hr>
+            <h2 style="color:#FF00FF"
+                th:text=" 'User name:- ' + ${currentUser} + '  Your selected location is:-  ' + ${TestCenterName}"></h2>
+            <hr>
+            <h3 th:text="'Your appointment: ' + ${userAppointment}+'   Location: '+ ${appointmentTestCenterName}"></h3>
+            <hr>
+            <h3 th:text="' Your test status:     ' + ${testCenterMessage}"></h3>
+            <hr>
+            <h3 th:text="' Your vaccin  status:     ' + ${vaccinStatus}"></h3>
+
+            <hr>
+            <h3 th:text="' Infection detection center:     ' + ${idcMessage}"></h3>
+            <hr>
+            <h3 th:text="' Message from Vaccin Center:     ' + ${vaccinCenterMessage}"></h3>
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

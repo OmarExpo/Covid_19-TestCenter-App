@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en"xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" >
+    <div th:replace="fragments/fragment :: bootstrap"></div>
+    <div th:replace="fragments/fragment :: cssDash"></div>
+    <title>Covid-19 IT Solution</title>
+
+
+</head>
+<body>
+<div id="div1">
+
+
+
+    <div class="card">
+        <div class="card-body">
+
+            <h6 th:text="${haMessage}"></h6>
+            <a th:href="@{/chooseTestCenter}"><button  class="btn btn-info">Back</button></a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
