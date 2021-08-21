@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <div th:replace="fragments/fragment :: bootstrap"></div>
+    <!--link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"-->
     <title>Signup page</title>
+
     <style>
         .main {
             height: 50%;
@@ -40,15 +42,21 @@
             background-color: rgb(108, 108, 108);
         }
     </style>
+
 </head>
 <body>
+
 <div class="main">
+
     <h1 style="text-align: center"> Register </h1>'
+
     <div th:replace="fragments/fragment :: goBack"></div>
     <br>
     <hr>
     <table>
-        <form method="post" action="/createList" th:object="${User}">
+
+        <form method="post" action="/createList" object="${user}">
+
             <div class="form-group">
                 <label> Your first name</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter first name" required>
@@ -94,16 +102,16 @@
             <button style="float: left" type="submit" class="btn btn-primary" value="CreateList">Submit</button>
 
         </form>
-        <br>
+        <!--br>
         <a th:href="@{/login}">
             <button class="btn btn-primary" style="float: right; margin-right: 5px">Login</button>
         </a>
-        <br>
+        <br-->
         <div>
 
 
             <hr>
-            <h6 style="color: red" th:text="${error}"></h6>
+            <h6 style="color: red" text="${error}"></h6>
             <hr>
         </div>
 
@@ -111,5 +119,31 @@
 
 
 </div>
+
+<!---- Source of inspiration http://jsfiddle.net/Shef/k2dHP/ --->
+<script>
+
+    $("#name").keyup(function(){
+
+        var nameInput=$(this).val();
+
+        $(this).val(nameInput.replace(/[^A-Za-z]/g,''));
+
+    })
+
+    $("#cpr").keyup(function(){
+
+        var cprInput=$(this).val();
+
+        $(this).val(cprInput.replace(/[^0-9]/g,''),
+
+            $(this).val(cprInput.substring(0,10) )
+
+        );
+
+    })
+
+</script>
+
 </body>
 </html>

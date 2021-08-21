@@ -28,9 +28,7 @@
 </head>
 <body>
 <div class="mainDiv">
-    <div th:replace="fragments/fragment :: goBack"></div>
-    <br>
-    <hr>
+
     <h1 style="text-align: center;">Covid-19 Login Page</h1>
     <h1 th:text="${TestCenterName}"></h1>
 
@@ -49,10 +47,10 @@
 
         <br>
         <hr>
-        <h6> By clicking on submit button you accept our GDPR conset and user data protection agreement <a th:href="@{/gdpr}">read more</a> </h6>
+        <h6> By clicking on submit button you accept our GDPR consent and user data protection agreement <a th:href="@{/gdpr}">read more</a> </h6>
         <hr>
 
-        <button style="float: left" type="submit" class="btn btn-primary"value="user">Submit</button>
+        <button style="float: left" type="submit" class="btn btn-primary"value="user">LOG IN</button>
 
 
     </form>
@@ -60,7 +58,10 @@
     <hr>
     <h6> If you wish to sign up please click on <strong>Register</strong> button </h6>
     <a th:href="@{/signUp}"><button  class="btn btn-info">Register</button></a>
-<hr>
+
+    <hr>
+
+    <a style="float: right" class="nav-link" th:href="@{/}"><button>Back to homepage</button></a>
 </div>
 </body>
 

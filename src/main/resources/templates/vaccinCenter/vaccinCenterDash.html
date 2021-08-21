@@ -11,7 +11,10 @@
 <body>
 
 <div id="div1">
-    <div th:replace="fragments/fragment :: goBack"></div>
+    <!--div-- th:replace="fragments/fragment :: goBack"></div-->
+    <!--input style="float: left" type="button" value="Go back!" onclick="history.back()"-->
+    <!--color: black !important -->
+
     <br>
 
     <hr>
@@ -32,7 +35,7 @@
 
 
 
-    <a style="color: black !important" class="nav-link" th:href="@{/}"><button>Logout</button></a>
+    <a style="float: left" class="nav-link" th:href="@{/}"><button>Back to homepage</button></a>
 
 </div>
 </body>

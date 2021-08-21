@@ -28,7 +28,8 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-public class homeController {
+public class HomeController {
+
     String TestCenterName;
     String UserName;
     int tcID = 0;
@@ -50,10 +51,12 @@ public class homeController {
     int vaccinStatusID;
     String vaccinStatus;
 
-
+    // Injecting Service Interface for business logic & best practice
+    // soft dependency - promotes loose-coupling (injecting interface, not its implementation)
     @Autowired
     ServiceInterface serviceInterface;
-    // default page handler
+
+    // Below are all Endpoints to handle web requests.
 
     @GetMapping("/")
     public String showDashboard() throws IOException {
@@ -64,14 +67,18 @@ public class homeController {
 
         List<Appointment> allAppointments = serviceInterface.fetchAllAppointments();
         Date myDate = new Date();
+
+        // this is for log file
+        saveLogs(myDate.toString() + "\n" + getIpAddress());
+
+        // Goal - we want to refresh/release old dates
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String strDate = formatter.format(myDate);
         String month = strDate.substring(3, 5);
         String day = strDate.substring(0, 2);
 
-        saveLogs(myDate.toString() + "\n" + getIpAddress());
-
         for (int i = 0; i < allAppointments.size(); i++) {
+            // date format here is  'yyyy-mm-dd'
             String day1 = allAppointments.get(i).getLocalDateTime().toString().substring(8, 10);
             String month1 = allAppointments.get(i).getLocalDateTime().toString().substring(5, 7);
 
@@ -79,7 +86,6 @@ public class homeController {
             if ((Integer.parseInt(day1) < Integer.parseInt(day)) && (Integer.parseInt(month1) <= Integer.parseInt(month))) {
                 long cpr = Long.parseLong(allAppointments.get(i).getCpr());
                 serviceInterface.deleteAppointment(cpr);
-
 
             }
         }
@@ -174,7 +180,7 @@ public class homeController {
         return "home/login";
     }
 
-    // log in
+    // log in validation check
     @PostMapping("/user")
     public ModelAndView login(@ModelAttribute LoginCheck loginCheck, Model model) {
 
@@ -203,7 +209,7 @@ public class homeController {
             model.addAttribute("currentAppointment", currentAppointment);
             return modelAndView;
         } else if ((loginCheck.getUserName().equals("adminI")) && (loginCheck.getPassword().equals("ai123"))) {
-            ModelAndView modelAndView = new ModelAndView("infectionCenter/secretaryIdash");
+            ModelAndView modelAndView = new ModelAndView("infectionCenter/administratorIdash");
             return modelAndView;
         } else if ((loginCheck.getUserName().equals("secretaryV")) && (loginCheck.getPassword().equals("sv123"))) {
             ModelAndView modelAndView = new ModelAndView("vaccinCenter/secretaryVdash");
@@ -213,7 +219,7 @@ public class homeController {
             return modelAndView;
         } else {
             ModelAndView modelAndView1 = new ModelAndView("home/dashboard");
-
+            System.out.println("Oops, Unknown Credentials");
             return modelAndView1;
         }
     }
@@ -221,22 +227,22 @@ public class homeController {
     // creates a user
     @PostMapping("/createList")
     public String create(@ModelAttribute User user, Model model) {
-        String error = "";
+        String error = null;
 
         List<User> userList = serviceInterface.fetchAllUser();
-        for (int i = 0; i < userList.size(); i++) {
-            if (userList.get(i).getCpr().equals(user.getCpr())) {
-                error = "This cpr is already in use, please veryfi cpr number if it is correct you have already signedUp kindly go to login page.";
+        for (User value : userList) {
+            if (value.getCpr().equals(user.getCpr())) {
+                error = "This cpr is already in use, please verify cpr number. If it is correct, you have already signed up, kindly go to login page.";
                 model.addAttribute("error", error);
                 return "home/signup";
             }
 
-            if (userList.get(i).getName().equals(user.getName())) {
+            if (value.getName().equals(user.getName())) {
                 error = "This name is already in use, please add any charecter after your name";
                 model.addAttribute("error", error);
                 return "home/signup";
             }
-            if (userList.get(i).getPassword().equals(user.getPassword())) {
+            if (value.getPassword().equals(user.getPassword())) {
                 error = "This password  is not approved by our system, please provide diffrent password";
                 model.addAttribute("error", error);
                 return "home/signup";
@@ -246,14 +252,16 @@ public class homeController {
                 model.addAttribute("error", error);
                 return "home/signup";
             }
-            if (userList.get(i).getUserName().equals((user.getUserName()))) {
+            if (value.getUserName().equals((user.getUserName()))) {
                 error = "This username is  already taken by someone else, please enter different username";
                 model.addAttribute("error", error);
                 return "home/signup";
             }
+            /*
             if (user.getUserName().length() > 30) {
-                error = "you have choosen a very long name please give a shorter name arround 30 character";
+                error = "Shorter name please, around 30 character";
             }
+            */
         }
         this.serviceInterface.addUser(user);
         Date date = new Date();
@@ -268,7 +276,7 @@ public class homeController {
 
 
 
-    // validates and records testcenter name
+    // validates and records test center name
     @PostMapping("/testCenterName")
     public String testme(@ModelAttribute TestCenter testCenter, Model model) {
         TestCenterName = testCenter.getCname();
@@ -365,8 +373,6 @@ public class homeController {
                     idcMessage = ims.getMessageI();
 
                     break;
-                } else {
-                    continue;
                 }
             }
             for (Vmessage vms : vmessages) {
@@ -374,8 +380,6 @@ public class homeController {
                     vMessage = vms.getMessageV();
 
                     break;
-                } else {
-                    continue;
                 }
             }
 
@@ -484,7 +488,7 @@ public class homeController {
         return "secretary/secretaryDash";
     }
 
-    // Login check
+    // Login check returning boolean true/false
     public boolean logIncheck1(String userName, String password) {
         boolean correct = false;
         List<User> userList = serviceInterface.fetchAllUser();

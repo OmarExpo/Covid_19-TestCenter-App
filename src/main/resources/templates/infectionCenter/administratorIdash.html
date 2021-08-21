@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" >
     <div th:replace="fragments/fragment :: bootstrap"></div>
-    <title>Covid-19 IT Solution</title>
+    <title>Secretary Dashboard</title>
     <div th:replace="fragments/fragment :: cssDash"></div>
 
     <style>
@@ -13,41 +13,25 @@
 <body>
 <div id="div1">
     <hr>
-    <marquee><h3 style="color: blue">Secretary Vaccine dashboard</h3></marquee>
+    <marquee><h3 style="color: blue">Administrator IDC dashboard</h3></marquee>
     <hr>
+
+
     <div><a style="float: left" th:href="@{/}">
         <button >Log Out</button>
     </a>
         <input style="float: right" type="button" value="Go back!" onclick="history.back()"></div>
     <br>
+
+    <!--div th:replace="fragments/fragment :: goBack"></div-->
+
+
+
     <hr>
     <div class="card">
         <div class="card-body">
             <h1 class="card-title">Search user by name</h1>
             <a th:href="@{/searchByName}" class="btn btn-primary">Click Me</a>
-        </div>
-    </div>
-    <hr>
-    <hr>
-    <div class="card">
-        <div class="card-body">
-            <h1 class="card-title">Add User</h1>
-            <a th:href="@{/signUp}" class="btn btn-primary">Click Me</a>
-        </div>
-    </div>
-    <hr>
-    <hr>
-    <div class="card">
-        <div class="card-body">
-            <h1 class="card-title">Make Direct Appointment</h1>
-            <a th:href="@{/makeDirectAppointment}" class="btn btn-primary">Click Me</a>
-        </div>
-    </div>
-    <hr>
-    <div class="card">
-        <div class="card-body">
-            <h1 class="card-title">Message to user</h1>
-            <a th:href="@{/vmessageToUser}" class="btn btn-primary">Click Me</a>
         </div>
     </div>
     <hr>
@@ -57,8 +41,16 @@
             <a th:href="@{/UpdateUserHome}" class="btn btn-primary">Click Me</a>
         </div>
     </div>
+    <hr>
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Message to user</h1>
+            <a th:href="@{/messageToUser}" class="btn btn-primary">Click Me</a>
+        </div>
+    </div>
+</div>
 </div>
 
-<a style="color: black !important" class="nav-link" th:href="@{/}"><button>Logout</button></a>
+
 </body>
 </html>

@@ -20,6 +20,7 @@ public class RepoImple implements RepoInterface {
     JdbcTemplate jdbcTemplate;
 
 
+    @Override
     public List<User> fetchAllUser() {
         String sql = "Select * from User";
         RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
