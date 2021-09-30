@@ -2,7 +2,7 @@
 
 Covid-19 TestCenter Application was our school project based on Java using Spring Framework with Spring Boot. Basically, we used Spring Boot with Thymeleaf template and MySQL database for storage purposes as backend.
 
-It is mainly Java, and a bit of CSS, Bootstrap and JavaScript with our view layer being Thymeleaf.
+It is mainly Java, and a bit of CSS, HTML, Bootstrap and JavaScript with our view layer being Thymeleaf.
 
 The project have three web options: TestCenter, VaccineCenter and InfectionCenter. Bear in mind, we just added the last two options but the testCenter is the main app.
 There are three user roles: user, secreatary and admin.
