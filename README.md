@@ -10,6 +10,6 @@ There are three user roles: user, secreatary and admin.
 The customer (aka patient user) should be able to login (basic login - already user can log in & new user can register first before logging in) check its information about the three option whether they have an appointment (or make it), assigned time for vaccination or any info about infections. In short, patient user has read-only permission.
 However, Secretary has update & read permission whereas Admin has the full #CRUD# operations. That way only the Admin can delete anything in our app.
 
-Please do check out our Covid-19 TestCenter Web App and setup the database to your specific details.
+Please do check out our Covid-19 TestCenter Web App and setup the database to your specific needs.
 
 Thank you in advance.
